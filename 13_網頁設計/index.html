@@ -1614,32 +1614,38 @@
                     return str;
                 }
 
-                // 4 Media Slots (Hero + 3 Plugins)
+                // 4 Media Slots (Hero + 3 Plugins) with live defaults for GitHub Pages
                 const slots = [
                     {
                         containerId: 'hero-video-container',
                         config: settings.hero || {
-                            type: settings.heroMediaType || 'mp4',
-                            url: settings.heroVideoPath || settings.heroYoutubeId || settings.heroGifPath || ''
+                            type: 'mp4',
+                            url: 'videos/z軸剖面示範.mp4'
                         },
                         defaultAlt: 'WHY BIM 核心展示'
                     },
                     {
                         containerId: 'sync-gif-container',
-                        config: settings.sync || {
-                            type: (settings.syncGifPath ? 'gif' : 'mp4'),
-                            url: settings.syncGifPath || ''
+                        config: (settings.sync && settings.sync.url) ? settings.sync : {
+                            type: 'mp4',
+                            url: 'videos/WHY_Sync_操作.mp4'
                         },
                         defaultAlt: 'WHY Sync 跨軟體同步操作分享'
                     },
                     {
                         containerId: 'slider-media-container',
-                        config: settings.slider || { type: 'mp4', url: '' },
+                        config: (settings.slider && settings.slider.url) ? settings.slider : {
+                            type: 'mp4',
+                            url: 'videos/z軸剖面示範.mp4'
+                        },
                         defaultAlt: 'NWC Z軸剖面移動滑桿操作分享'
                     },
                     {
                         containerId: 'monitor-media-container',
-                        config: settings.monitor || { type: 'mp4', url: '' },
+                        config: (settings.monitor && settings.monitor.url) ? settings.monitor : {
+                            type: 'mp4',
+                            url: ''
+                        },
                         defaultAlt: 'NWC 數據面板監測操作分享'
                     }
                 ];
@@ -1650,7 +1656,7 @@
                     const cfg = slot.config;
                     if (!cfg || !cfg.url || !cfg.url.trim()) return; // Keep default design or interactive demo
 
-                    let url = cfg.url.trim();
+                    let url = cfg.url.replace(/"/g, '').trim();
                     const type = cfg.type || 'mp4';
 
                     // Auto-normalize relative paths (e.g. if user forgot "videos/" or ".mp4")
@@ -1673,9 +1679,11 @@
                     container.className = "aspect-video bg-black flex items-center justify-center relative overflow-hidden";
 
                     if (type === 'mp4') {
+                        const altUrl = url.startsWith('13_網頁設計/') ? url.replace('13_網頁設計/', '') : ('13_網頁設計/' + url);
                         container.innerHTML = `
-                            <video autoplay loop muted playsinline class="w-full h-full object-cover" onerror="console.warn('Video failed to load: ' + this.currentSrc)">
+                            <video autoplay loop muted playsinline class="w-full h-full object-cover">
                                 <source src="${url}" type="video/mp4">
+                                <source src="${altUrl}" type="video/mp4">
                                 您的瀏覽器不支援播放此影片。
                             </video>
                         `;
