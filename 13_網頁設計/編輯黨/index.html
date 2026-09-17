@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WHY BIM Plugins | 專為 Revit 與 Navisworks 打造的高效 BIM 外掛工具</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        morandiBg: '#F9F8F6',      // 暖米白底色
+                        morandiCard: '#F2EFF9',    // 微紫灰卡片
+                        morandiCardBg: '#F4F2EE',  // 暖灰卡片底色
+                        morandiBorder: '#E6E2DB',  // 淺褐灰邊框
+                        morandiText: '#2D323A',    // 鐵灰深字
+                        morandiSubText: '#626873', // 灰褐副字
+                        
+                        // 莫蘭迪核心色系 Palette
+                        mBlue: '#6C8294',          // 灰藍色 (主強調色，代表 Sync)
+                        mGreen: '#8BA38E',         // 鼠尾草綠 (輔強調色，代表剖面、優惠折扣)
+                        mOrange: '#C5A59E',        // 莫蘭迪暗粉橘 (警示/亮點/同捆包主題)
+                        mOrangeDark: '#A4827B',    // 深粉橘 (文字用)
+                        mTaupe: '#A8998C',         // 灰褐色 (輔強調色，代表監測/企業)
+                        mClay: '#C2B0A2',          // 泥土粉灰
+                        mLightBg: '#FAF9F7',       // 極淺底色
+                    },
+                    boxShadow: {
+                        'morandi-soft': '0 10px 40px -15px rgba(108, 130, 148, 0.08)',
+                        'morandi-hover': '0 20px 50px -10px rgba(108, 130, 148, 0.12)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter & Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #F9F8F6;
+            color: #2D323A;
+            letter-spacing: 0.025em;
+        }
+        /* 細緻的日式背景裝飾紋路 */
+        .bg-dot-pattern {
+            background-size: 24px 24px;
+            background-image: radial-gradient(circle, rgba(168, 153, 140, 0.15) 1px, transparent 1px);
+        }
+        /* 自訂細緻滑桿樣式 */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #8BA38E; /* mGreen */
+            cursor: pointer;
+            border: 2px solid #F9F8F6;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+    </style>
+
+                <script>
+                    window.__EMBEDDED_SETTINGS__ = {"googleSheetUrl":"https://script.google.com/macros/s/AKfycbzaXV27F_PzDFQMCMQCwfF4GPswwqIcJrBnTlA5sseGfMotHNHZ8nhaT3DrwaMKfm3d/exec","installerUrl":"downloads/WHY_BIM_Bundle_Setup.zip","downloadUrls":{"bundle":{"primary":"downloads/WHY_BIM_Bundle_Setup.zip","mirror":""},"sync":{"primary":"downloads/WHY_Sync_Setup.zip","mirror":""},"slider":{"primary":"downloads/NWC_Z_Slider_Setup.zip","mirror":""},"monitor":{"primary":"downloads/NWC_Data_Monitor_Setup.zip","mirror":""}},"contactEmail":"stevensteven2255@gmail.com","updatedAt":"2026-09-17T14:27:22.739Z","hero":{"type":"mp4","url":""},"sync":{"type":"mp4","url":"videos/WHY_Sync_操作.mp4\""},"slider":{"type":"mp4","url":"videos/z軸剖面示範.mp4\""},"monitor":{"type":"mp4","url":"videos/z軸剖面示範_公開版.mp4\""}};
+                    window.__EMBEDDED_PRICING__ = {"sync":{"title":"WHY Sync 跨軟體同步工具 (專業版)","trialPrice":"NT$ 0","trialPeriod":"/30 天","originalPrice":"NT$ 4,500","discountTag":"限時 67 折","onlinePrice":"NT$ 3,000","onlinePeriod":"/ 年 / 帳號","savingsText":"現省 NT$ 1,500 (最推薦雙向同步工具)","enterpriseTitle":"企業單機買斷版","enterpriseOriginal":"NT$ 11,000","enterpriseTag":"買斷優惠 72 折","enterprisePrice":"NT$ 8,000","enterprisePeriod":"/ 單機永久","enterpriseSavings":"第 2 年起年維護費 20% (主版本免費升級 1 年)"},"slider":{"title":"NWC Z軸剖面移動滑桿","trialPrice":"NT$ 0","trialPeriod":"/ 30天","originalPrice":"NT$ 2,200","discountTag":"推廣優惠 68 折","onlinePrice":"NT$ 1,500","onlinePeriod":"/ 年 / 帳號","savingsText":"現省 NT$ 700 (低報銷門檻、超高工時回報)","enterpriseTitle":"企業單機買斷版","enterpriseOriginal":"NT$ 5,500","enterpriseTag":"買斷優惠 7 折","enterprisePrice":"NT$ 3,900","enterprisePeriod":"/ 單機永久","enterpriseSavings":"第 2 年起年維護費 20% (首年享軟體版本免費更新)"},"monitor":{"title":"NWC 數據面板監測","trialPrice":"NT$ 0","trialPeriod":"/ 14 天","originalPrice":"NT$ 3,600","discountTag":"推廣優惠 67 折","onlinePrice":"NT$ 2,400","onlinePeriod":"/ 年 / 帳號","savingsText":"現省 NT$ 1,200 (平均每月僅約 NT$ 200)","enterpriseTitle":"企業單機買斷版","enterpriseOriginal":"NT$ 9,800","enterpriseTag":"買斷優惠 71 折","enterprisePrice":"NT$ 7,000","enterprisePeriod":"/ 單機永久","enterpriseSavings":"提供 5~10 套企業包套團體方案（NT$ 35,000）"},"bundle":{"title":"🚩 三合一高效同捆包 (BIM Ultimate Bundle)","trialPrice":"NT$ 0","trialPeriod":"/ 14 天","originalPrice":"NT$ 6,900","discountTag":"超值 72 折","onlinePrice":"NT$ 4,990","onlinePeriod":"/ 年 / 帳號","savingsText":"現省 NT$ 1,910！(低於 Sync+數據面板 總和 $5,400，買兩套直接送一套)","enterpriseTitle":"企業買斷同捆包","enterpriseOriginal":"NT$ 18,900","enterpriseTag":"限時 73 折・免簽呈特惠","enterprisePrice":"NT$ 13,900","enterprisePeriod":"/ 單機永久","enterpriseSavings":"現省 NT$ 5,000！(總價壓在 1.5 萬以下，免總部審批簽核)"},"banner":{"title":"WHY Sync 同步外掛 + Z軸剖面外掛 (年約合購)","tag":"雙外掛合購黃金套餐","desc":"「買同步外掛，半價加購 Z 軸剖面」。針對同時建模與衝突協商的 BIM 工程師首選。","original":"原價 NT$ 4,500","price":"NT$ 3,600","period":"/ 年","savings":"立享 8 折・現省 NT$ 900"}};
+                    try {
+                        if (window.__EMBEDDED_SETTINGS__) {
+                            const cur = JSON.parse(localStorage.getItem('whybim_settings') || '{}');
+                            localStorage.setItem('whybim_settings', JSON.stringify(Object.assign({}, window.__EMBEDDED_SETTINGS__, cur)));
+                        }
+                        if (window.__EMBEDDED_PRICING__) {
+                            const curP = JSON.parse(localStorage.getItem('whybim_pricing') || '{}');
+                            localStorage.setItem('whybim_pricing', JSON.stringify(Object.assign({}, window.__EMBEDDED_PRICING__, curP)));
+                        }
+                    } catch(e){}
+                </script>
+                
+</head>
+<body class="overflow-x-hidden antialiased">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-morandiBg/90 border-b border-morandiBorder transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 h-24 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded bg-mBlue flex items-center justify-center">
+                    <span class="font-light text-xl text-white tracking-widest">W</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-semibold text-base tracking-widest text-morandiText group-hover:text-mBlue transition-colors duration-300">WHY BIM</span>
+                    <span class="text-[9px] text-morandiSubText tracking-widest uppercase -mt-0.5">Plugins Collection</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-9">
+                <a href="#hero" class="text-sm font-medium text-morandiSubText hover:text-mBlue transition-colors duration-300">首頁</a>
+                <a href="#products" class="text-sm font-medium text-morandiSubText hover:text-mBlue transition-colors duration-300">產品介紹</a>
+                <a href="#pricing" class="text-sm font-medium text-morandiSubText hover:text-mBlue transition-colors duration-300">授權方案</a>
+                <a href="#contact" class="text-sm font-medium text-morandiSubText hover:text-mBlue transition-colors duration-300">聯絡我們</a>
+                <button onclick="openDownloadHub()" class="text-sm font-semibold text-mBlue hover:text-morandiText transition-colors duration-300 flex items-center space-x-1">
+                    <span>🎮 軟體載點</span>
+                </button>
+                <a href="admin.html" class="text-xs font-semibold px-2.5 py-1 rounded bg-morandiCardBg border border-morandiBorder text-morandiSubText hover:border-mBlue hover:text-mBlue transition-all">後台管理 ⚙️</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="hidden md:flex items-center space-x-3">
+                <a href="#pricing" class="px-4 py-2.5 rounded border border-morandiBorder text-xs font-semibold text-morandiSubText hover:border-mBlue hover:text-mBlue transition-all duration-500">
+                    方案價格
+                </a>
+                <button onclick="openDownloadHub()" class="px-5 py-2.5 rounded bg-mBlue text-xs font-semibold text-white hover:bg-morandiText transition-all duration-500 shadow-sm flex items-center space-x-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    <span>直接下載安裝包</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 text-morandiSubText hover:text-morandiText focus:outline-none" aria-label="Toggle Menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Container -->
+        <div id="mobile-menu" class="hidden md:hidden bg-morandiBg border-b border-morandiBorder px-6 pt-2 pb-8 space-y-4">
+            <a href="#hero" class="block py-2.5 text-sm font-medium text-morandiSubText hover:text-mBlue transition-all">首頁</a>
+            <a href="#products" class="block py-2.5 text-sm font-medium text-morandiSubText hover:text-mBlue transition-all">產品介紹</a>
+            <a href="#pricing" class="block py-2.5 text-sm font-medium text-morandiSubText hover:text-mBlue transition-all">授權方案</a>
+            <a href="#contact" class="block py-2.5 text-sm font-medium text-morandiSubText hover:text-mBlue transition-all">聯絡我們</a>
+            <button onclick="openDownloadHub()" class="w-full text-left py-2.5 text-sm font-bold text-mBlue transition-all flex items-center space-x-1">
+                <span>🎮 軟體安裝包下載專區 (線上載點)</span>
+            </button>
+            <a href="admin.html" class="block py-2.5 text-sm font-medium text-morandiSubText hover:text-mBlue transition-all">管理後台 ⚙️</a>
+            <div class="pt-4 flex flex-col space-y-2.5">
+                <button onclick="openDownloadHub()" class="text-center py-3 rounded bg-mBlue text-xs font-semibold text-white hover:bg-morandiText transition-all shadow-sm flex items-center justify-center space-x-1">
+                    <span>⚡ 直接下載安裝包 (載點)</span>
+                </button>
+                <a href="#pricing" class="text-center py-3 rounded border border-morandiBorder text-xs font-semibold text-morandiSubText hover:border-mBlue transition-all">
+                    了解方案價格
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. Hero Section -->
+    <section id="hero" class="relative py-20 md:py-36 overflow-hidden bg-dot-pattern">
+        <!-- Soft top-to-bottom white fade -->
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-morandiBg/50 to-morandiBg pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-center">
+                
+                <!-- Left Side: Text & Actions -->
+                <div class="lg:col-span-6 space-y-10 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2.5 px-3.5 py-1 rounded bg-mBlue/10 border border-mBlue/20 text-xs font-medium text-mBlue uppercase tracking-widest mx-auto lg:mx-0">
+                        <span id="hero-tag-text">WHY BIM Plugins Collection</span>
+                    </div>
+
+                    <h1 id="hero-title-text" class="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-wide leading-snug text-morandiText">
+                        專為 Revit 與 Navisworks<br>打造的
+                        <span class="text-mBlue font-bold underline decoration-1 underline-offset-8">高效外掛</span>，<br>
+                        加速您的 BIM 協同作業。
+                    </h1>
+
+                    <p id="hero-subtitle-text" class="text-base sm:text-lg text-morandiSubText max-w-xl mx-auto lg:mx-0 leading-relaxed font-light">
+                        從跨軟體同步到精準剖面控制，以極簡直覺的介面設計解決工程痛點，大幅提升模型檢視與整合效率，為專業團隊帶來平靜、專注的流暢體驗。
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button onclick="openDownloadHub()" id="hero-trial-btn-text" class="w-full sm:w-auto text-center px-8 py-4 rounded bg-mBlue text-sm font-semibold text-white hover:bg-morandiText transition-all duration-500 shadow-morandi-soft hover:shadow-morandi-hover flex items-center justify-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            <span>下載安裝包 (載點專區)</span>
+                        </button>
+                        <a href="#pricing" id="hero-pricing-btn-text" class="w-full sm:w-auto text-center px-8 py-4 rounded bg-morandiCardBg text-sm font-semibold text-morandiText hover:bg-morandiBorder transition-all duration-500 border border-morandiBorder">
+                            了解方案
+                        </a>
+                    </div>
+
+                    <!-- Client Trust Badges -->
+                    <div class="pt-8 border-t border-morandiBorder/60 max-w-md mx-auto lg:mx-0">
+                        <p id="hero-trust-label" class="text-xs text-morandiSubText font-semibold uppercase tracking-widest mb-3">支援平台版本相容</p>
+                        <div class="flex items-center justify-center lg:justify-start space-x-6 text-morandiSubText font-mono text-xs opacity-85">
+                            <span id="hero-trust-revit">Revit 2022 - 2026</span>
+                            <span class="text-morandiBorder">|</span>
+                            <span id="hero-trust-navis">Navisworks 2022 - 2027</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Graphic/Video Placeholder (16:9) -->
+                <div class="lg:col-span-6">
+                    <div class="relative">
+                        <!-- Soft wide shadow backing -->
+                        <div class="absolute -inset-2 rounded bg-morandiBorder/25 blur opacity-70"></div>
+                        
+                        <!-- The Video/GIF placeholder structure -->
+                        <div class="relative rounded border border-morandiBorder bg-morandiCardBg overflow-hidden shadow-morandi-soft">
+                            <!-- Top window header -->
+                            <div class="flex items-center justify-between px-5 py-3.5 bg-morandiBg border-b border-morandiBorder">
+                                <div class="flex space-x-2">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-morandiBorder"></div>
+                                    <div class="w-2.5 h-2.5 rounded-full bg-morandiBorder"></div>
+                                    <div class="w-2.5 h-2.5 rounded-full bg-morandiBorder"></div>
+                                </div>
+                                <span class="text-xs font-mono text-morandiSubText tracking-wider">WHY_BIM_Showcase.mp4</span>
+                                <div class="w-4"></div>
+                            </div>
+
+                            <!-- 16:9 Video Canvas (Light Morandi Tone) -->
+                            <div id="hero-video-container" class="aspect-video bg-[#F1EEEC] flex flex-col items-center justify-center p-8 text-center relative overflow-hidden">
+                                
+                                <!-- Minimalist Japanese Wireframe in SVG -->
+                                <svg class="absolute inset-0 w-full h-full opacity-[0.25]" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="40" y="40" width="720" height="370" stroke="#6C8294" stroke-width="1"/>
+                                    <line x1="40" y1="225" x2="760" y2="225" stroke="#6C8294" stroke-width="0.75" stroke-dasharray="4 4"/>
+                                    <line x1="400" y1="40" x2="400" y2="410" stroke="#6C8294" stroke-width="0.75" stroke-dasharray="4 4"/>
+                                    <circle cx="400" cy="225" r="100" stroke="#A8998C" stroke-width="0.75"/>
+                                    <path d="M150 350 L400 120 L650 350 Z" stroke="#A8998C" stroke-width="1.25"/>
+                                    <line x1="150" y1="350" x2="650" y2="350" stroke="#2D323A" stroke-width="1.5"/>
+                                </svg>
+
+                                <!-- Play button badge -->
+                                <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-4 shadow-sm hover:scale-105 transition-transform duration-300 border border-morandiBorder">
+                                    <svg class="w-5 h-5 text-mBlue ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="text-sm font-semibold text-morandiText mb-2">產品操作展示影片 / GIF 預留區</h3>
+                                <p class="text-xs text-morandiSubText max-w-sm mb-4 leading-relaxed">
+                                    建議尺寸：800 x 450 px (16:9 比例)<br>
+                                    在此展示三款外掛在 Revit / Navisworks 視窗下的極簡高質感動態工作流。
+                                </p>
+                                <span class="px-2.5 py-1 rounded bg-morandiBg text-morandiSubText text-[10px] uppercase font-mono tracking-wider border border-morandiBorder">
+                                    Hero Video Placeholder
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Products Section -->
+    <section id="products" class="py-24 md:py-40 border-t border-morandiBorder bg-morandiBg relative">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+            
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-24 md:mb-36">
+                <span id="products-tag-text" class="text-xs font-bold text-mTaupe tracking-widest uppercase">核心產品技術</span>
+                <h2 id="products-title-text" class="text-3xl md:text-4xl font-semibold mt-3 text-morandiText">為 BIM 專業流程注入簡潔與高效</h2>
+                <p id="products-desc-text" class="text-morandiSubText mt-4 font-light leading-relaxed">
+                    擺脫繁瑣步驟，專注於設計與整合本質。我們精雕細琢每一個按鈕與操作回饋，幫助您在建廠與營造工程中維持極佳專注力。
+                </p>
+            </div>
+
+            <!-- Product 1: WHY Sync -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-center mb-28 md:mb-40">
+                <!-- Text Box (Left) -->
+                <div class="lg:col-span-6 space-y-8 order-2 lg:order-1">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded bg-mBlue/10 border border-mBlue/25 text-xs font-medium text-mBlue">
+                        <span id="sync-tag-text">Revit & Navisworks 連接器</span>
+                    </div>
+                    <h3 id="sync-title-text" class="text-2xl md:text-3xl font-bold text-morandiText">
+                        <span class="text-mBlue">WHY Sync</span> 旗艦跨軟體同步工具
+                    </h3>
+                    <p id="sync-desc-text" class="text-morandiSubText font-light leading-relaxed">
+                        直擊專案協調會（Clash Meeting）頻繁切換軟體的痛點。消除 Revit 與 Navisworks (NWC) 之間反覆匯出與對齊原點的繁雜手續。輸入柱位或編號即可自動定位與裁剪剖面，<strong>可為工程師省下將近 80% 的視角調整時間</strong>。
+                    </p>
+                    
+                    <!-- 5 Core Features List -->
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-start space-x-3.5">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-mBlue/10 flex items-center justify-center mt-1 text-mBlue">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <h4 id="sync-f1-title" class="text-sm font-semibold text-morandiText">Revit 範圍框複製並同步至 NWC</h4>
+                                <p id="sync-f1-desc" class="text-xs text-morandiSubText mt-0.5 font-light">一鍵將 Revit 範圍框直接同步至 Navisworks 視角，達到精確無誤的局部空間定位。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3.5">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-mBlue/10 flex items-center justify-center mt-1 text-mBlue">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <h4 id="sync-f2-title" class="text-sm font-semibold text-morandiText">快速外參（Link）新增檔案</h4>
+                                <p id="sync-f2-desc" class="text-xs text-morandiSubText mt-0.5 font-light">跳過 Autodesk 繁冗的原生裝載路徑設定，以最適化原點自動定位與對齊，加速外參載入。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3.5">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-mBlue/10 flex items-center justify-center mt-1 text-mBlue">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <h4 id="sync-f3-title" class="text-sm font-semibold text-morandiText">一鍵重新連結 Revit 檔案</h4>
+                                <p id="sync-f3-desc" class="text-xs text-morandiSubText mt-0.5 font-light">圖面更名或資料夾變更時，可整批重新關聯 Revit 外部檔案，避免耗費工時逐一重新連結。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3.5">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-mBlue/10 flex items-center justify-center mt-1 text-mBlue">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <h4 id="sync-f4-title" class="text-sm font-semibold text-morandiText">透過柱位（Grid）精準搜尋模型</h4>
+                                <p id="sync-f4-desc" class="text-xs text-morandiSubText mt-0.5 font-light">輸入軸網編號（支援單柱及多柱號區間定位）即刻鎖定並拉近，將 2 分鐘的操作簡化至 5 秒內完成。</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3.5">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-mBlue/10 flex items-center justify-center mt-1 text-mBlue">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <div>
+                                <h4 id="sync-f5-title" class="text-sm font-semibold text-morandiText">背景黑白切換（一鍵凸顯管路與干涉點）</h4>
+                                <p id="sync-f5-desc" class="text-xs text-morandiSubText mt-0.5 font-light">一鍵將無關的土建構件淡化為單色調，使冷熱水管、氣體鋼管與碰撞點極速突出。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GIF Placeholder (Right) -->
+                <div class="lg:col-span-6 order-1 lg:order-2">
+                    <div class="relative rounded border border-morandiBorder bg-morandiCardBg overflow-hidden shadow-morandi-soft">
+                        <!-- Top window header -->
+                        <div class="flex items-center justify-between px-5 py-3 bg-morandiBg border-b border-morandiBorder">
+                            <div class="flex space-x-2">
+                                <span class="w-2 h-2 rounded-full bg-morandiBorder"></span>
+                                <span class="w-2 h-2 rounded-full bg-morandiBorder"></span>
+                                <span class="w-2 h-2 rounded-full bg-morandiBorder"></span>
+                            </div>
+                            <span class="text-xs font-mono text-morandiSubText">WHY_Sync_Demo.gif</span>
+                            <div class="w-4"></div>
+                        </div>
+
+                        <!-- Content Canvas -->
+                        <div id="sync-gif-container" class="aspect-video bg-[#EFECE8] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+                            <!-- Visual placeholder decoration -->
+                            <div class="absolute inset-0 flex items-center justify-center opacity-[0.15]">
+                                <div class="w-44 h-44 border border-mBlue rounded-full"></div>
+                                <div class="w-28 h-28 border border-mBlue border-dashed rounded-full absolute"></div>
+                            </div>
+                            <svg class="w-10 h-10 text-mBlue mb-3" fill="none" stroke="currentColor" stroke-width="1.25" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/>
+                            </svg>
+                            <h4 class="text-sm font-semibold text-morandiText mb-1">WHY Sync 跨軟體同步運作展示 GIF</h4>
+                            <p class="text-xs text-morandiSubText max-w-sm mb-3 leading-relaxed">
+                                建議尺寸：640 x 360 px (16:9)<br>
+                                展示 Revit 切割範圍框與 Navisworks 自動對齊的連動流暢度。
+                            </p>
+                            <span class="px-2.5 py-0.5 rounded bg-morandiBg text-morandiSubText text-[9px] font-mono border border-morandiBorder">
+                                Product GIF Placeholder
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 2: NWC Z-Axis Section Slider -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-center mb-28 md:mb-40">
+                
+                <!-- Interactive Demo Container (Left in desktop) -->
+                <div class="lg:col-span-6 order-1">
+                    <div class="relative rounded border border-morandiBorder bg-morandiCardBg overflow-hidden shadow-morandi-soft">
+                        <!-- Window Bar -->
+                        <div class="flex items-center justify-between px-5 py-3 bg-morandiBg border-b border-morandiBorder">
+                            <div class="flex space-x-2">
+                                <span class="w-2 h-2 rounded-full bg-morandiBorder"></span>
+                                <span class="w-2 h-2 rounded-full bg-morandiBorder"></span>
+                                <span class="w-2 h-2 rounded-full bg-morandiBorder"></span>
+                            </div>
+                            <span class="text-xs font-mono text-morandiSubText">Interactive_Z-Axis_Slider.exe</span>
+                            <span class="text-[9px] text-mGreen border border-mGreen/30 px-2 py-0.2 rounded font-medium">可操作預覽</span>
+                        </div>
+
+                        <!-- Interactive demo zone -->
+                        <div id="slider-media-container" class="aspect-video bg-[#EAE8E4] flex flex-col justify-between p-5 relative select-none">
+                            
+                            <!-- Slider indicator bar -->
+                            <div class="flex justify-between items-center bg-morandiBg/90 border border-morandiBorder px-4 py-2 rounded text-xs">
+                                <span class="text-morandiSubText">目前 Z 軸剖面高程:</span>
+                                <span id="height-display" class="font-mono text-mGreen font-semibold">FL + 4,200 mm</span>
+                            </div>
+
+                            <!-- SVG 3D building model section mock (Morandi Colors) -->
+                            <div class="relative w-full h-36 flex items-center justify-center overflow-hidden">
+                                <svg class="w-full h-full" viewBox="0 0 400 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Columns (Taupe) -->
+                                    <line x1="80" y1="20" x2="80" y2="130" stroke="#A8998C" stroke-width="2.5" stroke-linecap="round"/>
+                                    <line x1="200" y1="20" x2="200" y2="130" stroke="#A8998C" stroke-width="2.5" stroke-linecap="round"/>
+                                    <line x1="320" y1="20" x2="320" y2="130" stroke="#A8998C" stroke-width="2.5" stroke-linecap="round"/>
+
+                                    <!-- Top ceiling / Floor -->
+                                    <rect x="50" y="20" width="300" height="6" fill="#C2B0A2" rx="1"/>
+                                    <rect x="50" y="124" width="300" height="6" fill="#C2B0A2" rx="1"/>
+
+                                    <!-- Level marks -->
+                                    <text x="355" y="25" fill="#626873" font-size="8" font-family="monospace">FL+6000</text>
+                                    <text x="355" y="75" fill="#626873" font-size="8" font-family="monospace">FL+3000</text>
+                                    <text x="355" y="125" fill="#626873" font-size="8" font-family="monospace">FL+0</text>
+
+                                    <!-- HVAC Duct - Level 2 (Morandi Clay / Muted Orange) -->
+                                    <rect id="duct-t2" x="100" y="38" width="200" height="14" rx="1.5" fill="#C5A59E" fill-opacity="0.8"/>
+                                    <!-- Piping - Level 2 (Morandi Blue / Muted Blue) -->
+                                    <rect id="pipe-t2" x="120" y="58" width="160" height="5" rx="1" fill="#6C8294" fill-opacity="0.8"/>
+
+                                    <!-- HVAC Duct - Level 1 -->
+                                    <rect id="duct-t1" x="100" y="80" width="200" height="14" rx="1.5" fill="#C5A59E" fill-opacity="0.8"/>
+                                    <!-- Piping - Level 1 -->
+                                    <rect id="pipe-t1" x="120" y="100" width="160" height="5" rx="1" fill="#6C8294" fill-opacity="0.8"/>
+
+                                    <!-- Moving Muted Green Section Line -->
+                                    <g id="section-plane">
+                                        <line x1="40" y1="50" x2="360" y2="50" stroke="#8BA38E" stroke-width="1.5" stroke-dasharray="4 3"/>
+                                        <circle cx="40" cy="50" r="3" fill="#8BA38E"/>
+                                        <circle cx="360" cy="50" r="3" fill="#8BA38E"/>
+                                    </g>
+                                </svg>
+                                
+                                <!-- Subtle crop overlay -->
+                                <div id="slice-overlay" class="absolute top-0 left-0 right-0 bg-[#F9F8F6]/55 border-b border-mGreen/60 pointer-events-none transition-all duration-75" style="height: 50px;"></div>
+                            </div>
+
+                            <!-- Z-Slider Control -->
+                            <div class="px-1 pb-1">
+                                <label for="z-slider" class="sr-only">Z-Axis Slider</label>
+                                <input type="range" id="z-slider" min="10" max="130" value="50" class="w-full h-1 bg-morandiBorder rounded-lg appearance-none cursor-pointer">
+                                <div class="flex justify-between text-[9px] text-morandiSubText font-mono mt-2">
+                                    <span>頂層 (FL+6000)</span>
+                                    <span>拖動滑桿以剖切結構</span>
+                                    <span>底層 (FL+0)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer indicator -->
+                        <div class="bg-morandiBg px-5 py-2 flex items-center justify-between text-xs text-morandiSubText border-t border-morandiBorder">
+                            <span>建議 GIF 尺寸: 640 x 360 px</span>
+                            <span>互動範例運作中</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Box (Right in desktop) -->
+                <div class="lg:col-span-6 space-y-8">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded bg-mGreen/10 border border-mGreen/25 text-xs font-medium text-mGreen">
+                        <span id="slider-tag-text">Navisworks 直覺輔助模組</span>
+                    </div>
+                    <h3 id="slider-title-text" class="text-2xl md:text-3xl font-bold text-morandiText">
+                        <span class="text-mGreen">NWC Z軸剖面移動滑桿</span>
+                    </h3>
+                    <p id="slider-desc-text" class="text-morandiSubText font-light leading-relaxed">
+                        徹底解決 Navisworks 原生 Gizmo 三維箭頭極難對準高程、調整繁瑣的痛點。垂直阻尼滑桿讓您實現**「電梯式一鍵流暢剖切」**。單席位每日可省下 15~30 分鐘調整工時，帶來 <strong>10~25 倍以上的工時投資報酬率 (ROI)</strong>。
+                    </p>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-start space-x-3 text-morandiSubText font-light">
+                            <svg class="w-5 h-5 text-mGreen flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span id="slider-f1-text"><strong>無段阻尼平滑推拉：</strong> 底層多執行緒最佳化，即使載入數百萬面大廠區模型，滑動仍順暢無拖影。</span>
+                        </li>
+                        <li class="flex items-start space-x-3 text-morandiSubText font-light">
+                            <svg class="w-5 h-5 text-mGreen flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span id="slider-f2-text"><strong>快捷高程（Level）快速記憶：</strong> 支援自訂儲存常用高度基準面，開會展示一鍵精準跳轉。</span>
+                        </li>
+                        <li class="flex items-start space-x-3 text-morandiSubText font-light">
+                            <svg class="w-5 h-5 text-mGreen flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span id="slider-f3-text"><strong>視覺舒壓呈現：</strong> 滑桿式操作無閃爍或黑屏延遲，確保專案協調會溝通毫無阻礙。</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Product 3: NWC Data Panel Monitor -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-center">
+                <!-- Text Box (Left) -->
+                <div class="lg:col-span-6 space-y-8 order-2 lg:order-1">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded bg-mBlue/10 border border-mBlue/25 text-xs font-medium text-mBlue">
+                        <span id="monitor-tag-text">Navisworks 即時監控面板</span>
+                    </div>
+                    <h3 id="monitor-title-text" class="text-2xl md:text-3xl font-bold text-morandiText">
+                        <span class="text-mBlue">NWC 數據面板監測</span>
+                    </h3>
+                    <p id="monitor-desc-text" class="text-morandiSubText font-light leading-relaxed">
+                        優化原廠屬性面板繁瑣的「反直覺點擊」設計。以前需點開「Revit 管道」、「元素」等多個標籤才能翻找管直徑或高程，現在<strong>游標滑過直接懸浮呈現 HUD 看板，實踐「0 次點擊、即時獲取數據」</strong>。每週節省 2 小時查驗工時。
+                    </p>
+
+                    <ul class="space-y-4">
+                        <li class="flex items-start space-x-3 text-morandiSubText font-light">
+                            <svg class="w-5 h-5 text-mBlue flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span id="monitor-f1-text"><strong>非同步底層 EventWatcher 技術：</strong> 採用高度優化選取監聽，大模型載入時滑鼠絕不轉圈卡頓。</span>
+                        </li>
+                        <li class="flex items-start space-x-3 text-slate-300 text-morandiSubText font-light">
+                            <svg class="w-5 h-5 text-mBlue flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span id="monitor-f2-text"><strong>絕對物理原點高程對齊：</strong> 排除相對座標轉換失誤，精確抓取模型基準面，避碰覆核更有把握。</span>
+                        </li>
+                        <li class="flex items-start space-x-3 text-slate-300 text-morandiSubText font-light">
+                            <svg class="w-5 h-5 text-mBlue flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span id="monitor-f3-text"><strong>安全雙引擎 .NET 架構：</strong> 同時內建雙 Framework 編譯，相容未來 5 年 (2022~2027+) 的 Navisworks 最新版本。</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Interactive Demo Container (Right) -->
+                <div class="lg:col-span-6 order-1 lg:order-2">
+                    <div class="relative rounded border border-morandiBorder bg-morandiCardBg overflow-hidden shadow-morandi-soft">
+                        <!-- Window Bar -->
+                        <div class="flex items-center justify-between px-5 py-3 bg-morandiBg border-b border-morandiBorder">
+                            <div class="flex space-x-2">
+                                <span class="w-2 h-2 rounded-full bg-morandiBorder"></span>
+                                <span class="w-2 h-2 rounded-full bg-morandiBorder"></span>
+                                <span class="w-2 h-2 rounded-full bg-morandiBorder"></span>
+                            </div>
+                            <span class="text-xs font-mono text-morandiSubText">BIM_Data_Monitor_Panel.exe</span>
+                            <span class="text-[9px] text-mBlue border border-mBlue/30 px-2 py-0.2 rounded font-medium">點點看管路</span>
+                        </div>
+
+                        <!-- Content Interactive Area -->
+                        <div id="monitor-media-container" class="aspect-video bg-[#EAE8E4] p-4 flex gap-4 relative">
+                            <!-- Left: Interactive Model Viewport -->
+                            <div class="w-2/3 border border-morandiBorder bg-morandiBg rounded p-3 flex flex-col justify-between">
+                                <div class="text-[9px] text-morandiSubText uppercase tracking-widest flex items-center justify-between font-semibold">
+                                    <span>簡化模型檢視</span>
+                                    <span class="text-mBlue text-[9px] font-normal">點擊有顏色管線</span>
+                                </div>
+                                
+                                <!-- Render interactive pipes (Morandi Colors) -->
+                                <div class="relative w-full h-32 flex items-center justify-center">
+                                    <svg class="w-full h-full" viewBox="0 0 200 100">
+                                        <!-- Grid lines -->
+                                        <line x1="0" y1="20" x2="200" y2="20" stroke="#E6E2DB" stroke-width="0.75" stroke-dasharray="2 2" />
+                                        <line x1="0" y1="50" x2="200" y2="50" stroke="#E6E2DB" stroke-width="0.75" stroke-dasharray="2 2" />
+                                        <line x1="0" y1="80" x2="200" y2="80" stroke="#E6E2DB" stroke-width="0.75" stroke-dasharray="2 2" />
+
+                                        <!-- Pipe A (Chilled Water Pipe - Morandi Blue) -->
+                                        <g id="pipe-a" class="cursor-pointer" onclick="selectPipe('A')">
+                                            <rect x="10" y="15" width="180" height="11" rx="1.5" fill="#6C8294" class="transition-all hover:opacity-80"/>
+                                            <text x="15" y="23" fill="white" font-size="6.5" font-weight="500">冰水管 CHWP-01</text>
+                                        </g>
+
+                                        <!-- Pipe B (HVAC Duct - Morandi Clay) -->
+                                        <g id="pipe-b" class="cursor-pointer" onclick="selectPipe('B')">
+                                            <rect x="20" y="42" width="160" height="16" rx="1.5" fill="#C2B0A2" class="transition-all hover:opacity-80"/>
+                                            <text x="25" y="52" fill="white" font-size="6.5" font-weight="500">空調風管 HVD-04</text>
+                                        </g>
+
+                                        <!-- Pipe C (Fire Sprinkler - Morandi Greenish Muted Clay) -->
+                                        <g id="pipe-c" class="cursor-pointer" onclick="selectPipe('C')">
+                                            <rect x="30" y="72" width="140" height="8" rx="1.5" fill="#8BA38E" class="transition-all hover:opacity-80"/>
+                                            <text x="35" y="78" fill="white" font-size="6.5" font-weight="500">消防幹管 FSP-02</text>
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="text-[9px] text-morandiSubText text-center font-light">點擊畫面上特定顏色的三根管件系統</div>
+                            </div>
+
+                            <!-- Right: The Monitoring Panel (Morandi Beige Style) -->
+                            <div class="w-1/3 border border-morandiBorder bg-morandiBg rounded p-3 flex flex-col justify-between">
+                                <div class="border-b border-morandiBorder pb-1.5">
+                                    <div class="flex items-center space-x-1.5">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-mBlue"></span>
+                                        <span class="text-[9px] font-bold text-mBlue tracking-widest uppercase">WHY Monitor</span>
+                                    </div>
+                                    <h5 class="text-[10px] font-semibold text-morandiText mt-0.5">即時屬性看板</h5>
+                                </div>
+
+                                <div class="space-y-2 my-2 text-[10px]">
+                                    <div>
+                                        <div class="text-[8px] text-morandiSubText uppercase">系統別名稱</div>
+                                        <div id="m-name" class="font-medium text-morandiText truncate">冰水管 CHWP-01</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-[8px] text-morandiSubText">外徑規格</div>
+                                        <div id="m-size" class="font-mono font-semibold text-mBlue">DN 150 mm</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-[8px] text-morandiSubText">中心高程</div>
+                                        <div id="m-elevation" class="font-mono font-semibold text-mGreen">FL + 4,250 mm</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-[8px] text-morandiSubText">來源圖層</div>
+                                        <div id="m-file" class="text-[8px] text-morandiSubText truncate">WHY_HVAC_Model.nwc</div>
+                                    </div>
+                                </div>
+
+                                <div class="border-t border-morandiBorder pt-1 text-[8px] text-morandiSubText flex justify-between">
+                                    <span>連線狀態</span>
+                                    <span class="text-mGreen font-medium">● 良好</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="bg-morandiBg px-5 py-2 flex items-center justify-between text-xs text-morandiSubText border-t border-morandiBorder">
+                            <span>建議 GIF 尺寸: 640 x 360 px</span>
+                            <span>互動範例運作中</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 3. Pricing Section -->
+    <section id="pricing" class="py-24 md:py-40 border-t border-morandiBorder bg-dot-pattern relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-morandiBg/60 to-morandiBg pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
+            
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold text-mBlue tracking-widest uppercase">多元授權方案</span>
+                <h2 class="text-3xl md:text-4xl font-semibold mt-3 text-morandiText">配合不同專案規模的彈性方案</h2>
+                <p class="text-morandiSubText mt-4 font-light leading-relaxed">
+                    我們提供個別外掛獨立授權，亦提供超值三合一同捆包方案。請從下方切換，檢視其對應的試用、線上訂閱與企業買斷方案。
+                </p>
+            </div>
+
+            <!-- Product Tab Switcher for Pricing (Includes 4th tab for Bundle) -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12 max-w-3xl mx-auto">
+                <button id="tab-sync" onclick="changePricingTab('sync')" class="flex-1 min-w-[130px] px-4 py-3 rounded text-xs font-semibold border border-morandiBorder bg-morandiBg text-morandiSubText hover:border-mBlue transition-all duration-300">
+                    WHY Sync 同步工具
+                </button>
+                <button id="tab-slider" onclick="changePricingTab('slider')" class="flex-1 min-w-[130px] px-4 py-3 rounded text-xs font-semibold border border-morandiBorder bg-morandiBg text-morandiSubText hover:border-mBlue transition-all duration-300">
+                    NWC Z軸剖面滑桿
+                </button>
+                <button id="tab-monitor" onclick="changePricingTab('monitor')" class="flex-1 min-w-[130px] px-4 py-3 rounded text-xs font-semibold border border-morandiBorder bg-morandiBg text-morandiSubText hover:border-mBlue transition-all duration-300">
+                    NWC 數據面板監測
+                </button>
+                <button id="tab-bundle" onclick="changePricingTab('bundle')" class="flex-1 min-w-[170px] px-4 py-3 rounded text-xs font-bold border border-mOrange bg-mOrange/10 text-mOrange hover:bg-mOrange hover:text-white transition-all duration-300 flex items-center justify-center space-x-1">
+                    <span>★ 三合一高效同捆包</span>
+                </button>
+            </div>
+
+            <!-- Pricing Target Product Label -->
+            <div class="text-center mb-10 bg-morandiCardBg/30 border border-morandiBorder py-3.5 px-6 rounded max-w-md mx-auto">
+                <p class="text-[10px] text-morandiSubText tracking-widest uppercase">目前顯示方案產品：</p>
+                <h4 id="pricing-desc-title" class="text-base font-semibold text-morandiText mt-0.5">WHY Sync 跨軟體同步工具</h4>
+            </div>
+
+            <!-- Pricing Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+                
+                <!-- Plan 1: Trial -->
+                <div class="bg-morandiBg border border-morandiBorder rounded p-8 flex flex-col justify-between hover:border-mBlue/50 transition-all duration-500 shadow-morandi-soft hover:shadow-morandi-hover">
+                    <div class="space-y-6">
+                        <div class="relative">
+                            <span class="text-[10px] font-bold text-morandiSubText uppercase tracking-wider">個人評估</span>
+                            <h3 class="text-xl font-bold text-morandiText mt-1">試用版</h3>
+                            <p class="text-morandiSubText text-xs mt-1.5 font-light">無負擔評估核心加速表現</p>
+                        </div>
+                        
+                        <!-- Pricing Area -->
+                        <div class="border-b border-morandiBorder pb-6">
+                            <div class="flex items-baseline flex-wrap gap-2 h-5">
+                                <!-- Placeholders to keep vertical alignments aligned with middle card -->
+                                <span class="text-xs text-transparent">Placeholder</span>
+                            </div>
+                            <div class="flex items-baseline mt-1.5">
+                                <span id="price-trial" class="text-3xl font-bold text-morandiText">NT$ 0</span>
+                                <span id="period-trial" class="text-morandiSubText text-xs font-light"> / 14 天</span>
+                            </div>
+                            <p class="text-[10px] text-mGreen mt-1.5 font-medium">免費申請，無須綁定信用卡</p>
+                        </div>
+
+                        <ul id="features-trial" class="space-y-3.5 text-xs text-morandiSubText">
+                            <!-- JS populated features -->
+                        </ul>
+                    </div>
+
+                    <div class="mt-8 space-y-2">
+                        <button onclick="openDownloadHub()" class="block w-full text-center py-3.5 px-4 rounded bg-mBlue hover:bg-morandiText text-xs font-semibold text-white transition-all duration-300 shadow-sm flex items-center justify-center space-x-1.5">
+                            <span>🎮 前往載點專區 (直接下載)</span>
+                        </button>
+                        <a href="#contact" class="block text-center text-[11px] text-morandiSubText hover:text-mBlue py-1">
+                            或 填寫表單諮詢方案報價
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Plan 2: Online (Recommended) -->
+                <div class="bg-morandiBg border-2 border-mBlue rounded p-8 flex flex-col justify-between transition-all duration-500 shadow-morandi-soft hover:shadow-morandi-hover relative">
+                    <!-- Ribbon -->
+                    <span class="absolute top-0 right-8 -translate-y-1/2 bg-mBlue text-white text-[9px] font-bold uppercase tracking-widest py-1 px-3.5 rounded shadow-sm">
+                        RECOMMENDED
+                    </span>
+
+                    <div class="space-y-6">
+                        <div>
+                            <span class="text-[10px] font-bold text-mBlue uppercase tracking-wider">中小型工程專案團隊</span>
+                            <h3 class="text-xl font-bold text-morandiText mt-1">線上版</h3>
+                            <p class="text-morandiSubText text-xs mt-1.5 font-light">線上帳號綁定，視專案靈活切換</p>
+                        </div>
+                        
+                        <!-- Pricing Area with Promo Price -->
+                        <div class="border-b border-morandiBorder pb-6">
+                            <div class="flex items-baseline flex-wrap gap-2">
+                                <span id="price-original" class="text-xs text-morandiSubText line-through font-mono">NT$ 9,800</span>
+                                <span id="discount-tag" class="px-2 py-0.5 rounded bg-mGreen/10 text-mGreen text-[9px] font-semibold tracking-wider">限時 7 折優惠</span>
+                            </div>
+                            <div class="flex items-baseline mt-1.5">
+                                <span id="price-online" class="text-3xl font-bold text-mBlue">NT$ 6,800</span>
+                                <span id="period-online" class="text-morandiSubText text-xs font-light"> / 年 / 帳號</span>
+                            </div>
+                            <p id="price-savings" class="text-[10px] text-mGreen mt-1.5 font-medium">現省 NT$ 3,000 (新品發行推廣價)</p>
+                        </div>
+
+                        <ul id="features-online" class="space-y-3.5 text-xs text-morandiSubText">
+                            <!-- JS populated features -->
+                        </ul>
+                    </div>
+
+                    <div class="mt-8">
+                        <a href="#contact" class="block w-full text-center py-3.5 px-4 rounded bg-mBlue text-xs font-semibold text-white hover:bg-morandiText transition-all duration-300">
+                            線上訂閱
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Plan 3: Enterprise / Perpetual (Dynamic fields) -->
+                <div class="bg-morandiBg border border-morandiBorder rounded p-8 flex flex-col justify-between hover:border-mTaupe/50 transition-all duration-500 shadow-morandi-soft hover:shadow-morandi-hover">
+                    <div class="space-y-6">
+                        <div>
+                            <span class="text-[10px] font-bold text-mTaupe uppercase tracking-wider">高資安/買斷客群</span>
+                            <h3 id="title-enterprise" class="text-xl font-bold text-morandiText mt-1">企業單機買斷版</h3>
+                            <p class="text-morandiSubText text-xs mt-1.5 font-light">離線授權與永久買斷方案</p>
+                        </div>
+                        
+                        <!-- Pricing Area -->
+                        <div class="border-b border-morandiBorder pb-6">
+                            <div class="flex items-baseline flex-wrap gap-2">
+                                <span id="price-original-ent" class="text-xs text-morandiSubText line-through font-mono"></span>
+                                <span id="discount-tag-ent" class="px-2 py-0.5 rounded bg-mGreen/10 text-mGreen text-[9px] font-semibold tracking-wider"></span>
+                            </div>
+                            <div class="flex items-baseline mt-1.5">
+                                <span id="price-enterprise" class="text-3xl font-bold text-morandiText">NT$ 8,000</span>
+                                <span id="period-enterprise" class="text-morandiSubText text-xs font-light"> / 單機永久</span>
+                            </div>
+                            <p id="price-savings-ent" class="text-[10px] text-mTaupe mt-1.5 font-medium"></p>
+                        </div>
+
+                        <ul id="features-enterprise" class="space-y-3.5 text-xs text-morandiSubText">
+                            <!-- JS populated features -->
+                        </ul>
+                    </div>
+
+                    <div class="mt-8">
+                        <a href="#contact" class="block w-full text-center py-3.5 px-4 rounded bg-mTaupe text-xs font-semibold text-white hover:bg-morandiText transition-all duration-300 shadow-sm">
+                            聯絡專人報價
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bundle Promotion Banner -->
+            <div class="mt-20 bg-[#F4F2EE] border border-morandiBorder rounded-xl p-8 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="space-y-2 text-center md:text-left">
+                    <span id="bundle-banner-tag" class="px-2.5 py-0.5 rounded bg-mOrange/10 text-mOrange text-[10px] font-bold tracking-widest uppercase border border-mOrange/20">雙外掛合購黃金套餐</span>
+                    <h4 id="bundle-banner-title" class="text-lg font-bold text-morandiText">WHY Sync 同步外掛 + Z軸剖面外掛 (年約合購)</h4>
+                    <p id="bundle-banner-desc" class="text-xs text-morandiSubText font-light">「買同步外掛，半價加購 Z 軸剖面」。針對同時建模與衝突協商的 BIM 工程師首選。</p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="text-right">
+                        <span id="bundle-banner-original" class="text-xs text-morandiSubText line-through font-mono">原價 NT$ 4,500</span>
+                        <div class="text-xl font-bold text-mBlue mt-0.5"><span id="bundle-banner-price">NT$ 3,600</span><span id="bundle-banner-period" class="text-xs font-light text-morandiSubText"> / 年</span></div>
+                        <p id="bundle-banner-savings" class="text-[10px] text-mGreen font-semibold mt-0.5">立享 8 折・現省 NT$ 900</p>
+                    </div>
+                    <a href="#contact" class="px-6 py-3.5 rounded bg-mBlue text-xs font-semibold text-white hover:bg-morandiText transition-all duration-300 shadow-sm">
+                        立即搶購
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 4. Contact Us Section -->
+    <section id="contact" class="py-24 md:py-40 border-t border-morandiBorder bg-morandiBg">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12">
+                
+                <!-- Left: Info & Description -->
+                <div class="lg:col-span-5 space-y-10">
+                    <div>
+                        <span id="contact-tag-text" class="text-xs font-bold text-mTaupe tracking-widest uppercase">聯絡洽詢</span>
+                        <h2 id="contact-title-text" class="text-3xl font-semibold mt-3 text-morandiText">與我們取得聯繫</h2>
+                        <p id="contact-intro-text" class="text-morandiSubText mt-4 font-light leading-relaxed">
+                            不論您是需要取得為期 14 天的試用版下載授權，或是想進一步了解個別外掛的年費訂閱優惠、高安全晶圓案場的完全離線授權建置，技術專員隨時隨地為您解答。
+                        </p>
+                    </div>
+
+                    <div class="space-y-5">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 rounded bg-morandiCardBg border border-morandiBorder flex items-center justify-center text-mBlue">
+                                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </div>
+                            <div>
+                                <h4 id="contact-email-label" class="text-[10px] text-morandiSubText font-semibold uppercase tracking-wider">電子郵件信箱</h4>
+                                <p id="contact-email-text" class="text-sm text-morandiText font-medium mt-0.5">support@whybim.com</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 rounded bg-morandiCardBg border border-morandiBorder flex items-center justify-center text-mBlue">
+                                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            </div>
+                            <div>
+                                <h4 id="contact-location-label" class="text-[10px] text-morandiSubText font-semibold uppercase tracking-wider">技術研發據點</h4>
+                                <p id="contact-location-text" class="text-sm text-morandiText font-medium mt-0.5">台灣新竹市科學園區研發園路</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Form -->
+                <div class="lg:col-span-7">
+                    <div class="bg-morandiBg border border-morandiBorder rounded p-8 sm:p-12 relative shadow-morandi-soft">
+                        <!-- Submit Success Tip -->
+                        <div id="form-success" class="hidden absolute inset-0 bg-morandiBg/98 z-20 rounded flex flex-col items-center justify-center text-center p-8 transition-all duration-500">
+                            <div class="w-14 h-14 rounded-full bg-mGreen/10 flex items-center justify-center mb-3">
+                                <svg class="w-6 h-6 text-mGreen" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-morandiText mb-1">洽詢表單傳送成功！</h3>
+                            <p class="text-xs text-mGreen font-semibold mb-3">
+                                🎉 感謝您的支持，安裝包已為您就緒！
+                            </p>
+                            <p class="text-xs text-morandiSubText max-w-md mb-5 leading-relaxed">
+                                外掛程式已內建 <strong>14 天免費完整功能體驗</strong>。<br>
+                                下載並安裝載入 Revit / Navisworks 後即刻自動啟用，<strong>免手動輸入任何金鑰序號</strong>即可直接開始使用！
+                            </p>
+                            
+                            <div class="flex flex-col sm:flex-row items-center space-y-2.5 sm:space-y-0 sm:space-x-3 mb-4">
+                                <a id="btn-download-installer" href="downloads/WHY_BIM_Plugins_Setup.zip" download class="px-6 py-3 rounded bg-mBlue text-xs font-semibold text-white hover:bg-morandiText transition-all shadow-morandi-soft flex items-center space-x-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                    <span>📥 立即下載試用安裝包 (.zip)</span>
+                                </a>
+                                <button onclick="resetForm()" class="px-4 py-3 rounded border border-morandiBorder text-xs text-morandiSubText hover:text-morandiText bg-white transition-all">
+                                    關閉視窗
+                                </button>
+                            </div>
+                            <span class="text-[10px] text-morandiSubText opacity-75">若您諮詢的是線上訂閱或企業買斷方案，技術專員將主動為您開立專屬報價單。</span>
+                        </div>
+
+                        <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="name" class="block text-[10px] font-semibold text-morandiSubText uppercase tracking-wider mb-2">姓名 <span class="text-mBlue">*</span></label>
+                                    <input type="text" id="name" required class="w-full px-4 py-3 rounded bg-morandiBg border border-morandiBorder focus:border-mBlue text-sm text-morandiText placeholder-morandiSubText/50 outline-none transition-all duration-300" placeholder="陳大同">
+                                </div>
+                                <div>
+                                    <label for="company" class="block text-[10px] font-semibold text-morandiSubText uppercase tracking-wider mb-2">公司名稱 <span class="text-mBlue">*</span></label>
+                                    <input type="text" id="company" required class="w-full px-4 py-3 rounded bg-morandiBg border border-morandiBorder focus:border-mBlue text-sm text-morandiText placeholder-morandiSubText/50 outline-none transition-all duration-300" placeholder="例：大同營造工程">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-[10px] font-semibold text-morandiSubText uppercase tracking-wider mb-2">電子郵件信箱 <span class="text-mBlue">*</span></label>
+                                <input type="email" id="email" required class="w-full px-4 py-3 rounded bg-morandiBg border border-morandiBorder focus:border-mBlue text-sm text-morandiText placeholder-morandiSubText/50 outline-none transition-all duration-300" placeholder="name@company.com">
+                            </div>
+
+                            <div>
+                                <label for="interest" class="block text-[10px] font-semibold text-morandiSubText uppercase tracking-wider mb-2">諮詢的產品與方案</label>
+                                <select id="interest" class="w-full px-4 py-3 rounded bg-morandiBg border border-morandiBorder focus:border-mBlue text-sm text-morandiSubText outline-none transition-all duration-300">
+                                    <option value="sync-trial" class="bg-morandiBg text-morandiText">WHY Sync 同步工具 - 試用版</option>
+                                    <option value="sync-online" class="bg-morandiBg text-morandiText">WHY Sync 同步工具 - 線上訂閱版 (NT$ 3,000/年)</option>
+                                    <option value="sync-offline" class="bg-morandiBg text-morandiText">WHY Sync 同步工具 - 企業單機買斷版 (NT$ 8,000/單機永久)</option>
+                                    <option value="slider-trial" class="bg-morandiBg text-morandiText">NWC Z軸剖面滑桿 - 試用版</option>
+                                    <option value="slider-online" class="bg-morandiBg text-morandiText">NWC Z軸剖面滑桿 - 線上訂閱版 (NT$ 1,500/年)</option>
+                                    <option value="slider-offline" class="bg-morandiBg text-morandiText">NWC Z軸剖面滑桿 - 企業單機買斷版 (NT$ 3,900/單機永久)</option>
+                                    <option value="monitor-trial" class="bg-morandiBg text-morandiText">NWC 數據面板監測 - 試用版</option>
+                                    <option value="monitor-online" class="bg-morandiBg text-morandiText">NWC 數據面板監測 - 線上訂閱版 (NT$ 2,400/年)</option>
+                                    <option value="monitor-offline" class="bg-morandiBg text-morandiText">NWC 數據面板監測 - 企業單機買斷版 (NT$ 7,000/單機永久)</option>
+                                    <option value="bundle-online" class="bg-morandiBg text-morandiText">三合一高效同捆包 - 線上訂閱版 (NT$ 4,990/年 - 推薦)</option>
+                                    <option value="bundle-offline" class="bg-morandiBg text-morandiText">三合一高效同捆包 - 企業買斷版 (NT$ 13,900/單機永久 - 免簽呈推薦)</option>
+                                    <option value="other" class="bg-morandiBg text-morandiText">其他諮詢合作</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="message" class="block text-[10px] font-semibold text-morandiSubText uppercase tracking-wider mb-2">需求說明 <span class="text-mBlue">*</span></label>
+                                <textarea id="message" rows="4" required class="w-full px-4 py-3 rounded bg-morandiBg border border-morandiBorder focus:border-mBlue text-sm text-morandiText placeholder-morandiSubText/50 outline-none transition-all duration-300" placeholder="請填寫您希望評估測試的管線系統或專案細節..."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-4 px-6 rounded bg-mBlue text-xs font-semibold text-white hover:bg-morandiText transition-all duration-500 flex items-center justify-center space-x-2">
+                                <span>送出洽詢表單</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-morandiBg border-t border-morandiBorder py-16">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                <!-- Left: Logo & Info -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded bg-mBlue flex items-center justify-center">
+                        <span class="font-light text-md text-white tracking-widest">W</span>
+                    </div>
+                    <span class="font-semibold tracking-widest text-morandiText text-sm">WHY BIM Plugins</span>
+                </div>
+
+                <!-- Center: Navigation -->
+                <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs text-morandiSubText font-medium">
+                    <a href="#hero" class="hover:text-mBlue transition-colors duration-300">首頁</a>
+                    <a href="#products" class="hover:text-mBlue transition-colors duration-300">產品介紹</a>
+                    <a href="#pricing" class="hover:text-mBlue transition-colors duration-300">授權方案</a>
+                    <a href="#contact" class="hover:text-mBlue transition-colors duration-300">聯絡我們</a>
+                </div>
+
+                <!-- Right: Copyright -->
+                <div class="text-[11px] text-morandiSubText text-center md:text-right font-light">
+                    Copyright © 2026 WHY BIM Plugins. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Game-Launcher Style Download Hub Modal -->
+    <div id="download-hub-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 sm:p-6 overflow-y-auto" onclick="if(event.target === this) closeDownloadHub()">
+        <div class="relative w-full max-w-4xl bg-[#FAF8F5] rounded-2xl border border-morandiBorder shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col">
+            
+            <!-- Modal Header -->
+            <div class="px-6 py-5 bg-white border-b border-morandiBorder flex items-center justify-between sticky top-0 z-10">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-mBlue/10 border border-mBlue/30 flex items-center justify-center text-mBlue text-xl">
+                        🎮
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h3 class="text-base sm:text-lg font-bold text-morandiText">軟體安裝包下載專區 (線上載點)</h3>
+                            <span class="px-2 py-0.5 rounded-full bg-mGreen/10 text-mGreen text-[10px] font-semibold tracking-wider">即刻下載・免審核</span>
+                        </div>
+                        <p class="text-xs text-morandiSubText mt-0.5">點擊下方載點直接下載安裝包。首次載入電腦即自動開啟 14 天完整功能試用！</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeDownloadHub()" class="w-8 h-8 rounded-full bg-morandiBg hover:bg-morandiBorder text-morandiSubText hover:text-morandiText flex items-center justify-center transition-colors" title="關閉視窗">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-6 sm:p-8 space-y-6 overflow-y-auto text-xs">
+
+                <!-- 1. Featured Card: Bundle Setup (All-in-One) -->
+                <div id="hub-card-bundle" class="relative rounded-2xl border-2 border-mBlue/40 bg-gradient-to-br from-white to-[#F0F4F8] p-6 shadow-sm hover:shadow-md transition-all">
+                    <div class="absolute -top-3 left-6 bg-mBlue text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm flex items-center space-x-1">
+                        <span>👑 旗艦推薦・三合一完整同捆包</span>
+                    </div>
+
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pt-2">
+                        <div class="space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <h4 class="text-lg font-bold text-morandiText">WHY BIM 三合一高效全套工具包</h4>
+                                <span class="px-2 py-0.5 rounded bg-mBlue/10 text-mBlue text-[11px] font-mono font-medium">v2026.3.1</span>
+                            </div>
+                            <p class="text-xs text-morandiSubText leading-relaxed">
+                                一次整合安裝「<strong>WHY Sync 跨軟體同步</strong>」+「<strong>NWC Z軸剖面移動滑桿</strong>」+「<strong>NWC 數據面板監測 HUD</strong>」。<br>
+                                專為協同作業與檢視衝突打造，解壓縮後執行一鍵安裝即可完成全套部署。
+                            </p>
+                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-morandiSubText pt-1 font-mono">
+                                <span>📦 檔案：WHY_BIM_Bundle_Setup.zip</span>
+                                <span>⚡ 系統：Revit 2022-2026 & Navisworks 2022-2027</span>
+                                <span>🔒 綠色免序號直接安裝</span>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 flex-shrink-0 min-w-[200px]">
+                            <a id="hub-dl-bundle-primary" href="downloads/WHY_BIM_Bundle_Setup.zip" download class="px-5 py-3 rounded-lg bg-mBlue text-white font-semibold text-center hover:bg-morandiText transition-all shadow-sm flex items-center justify-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span>🚀 主載點 (官方高速下載)</span>
+                            </a>
+                            <a id="hub-dl-bundle-mirror" href="#" onclick="handleMirrorClick(event, this)" target="_blank" class="px-5 py-2.5 rounded-lg border border-morandiBorder bg-white text-morandiText font-medium text-center hover:border-mBlue hover:text-mBlue transition-all flex items-center justify-center space-x-1.5">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+                                <span>☁️ 雲端備用載點 (Google Drive)</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Individual 3 Plugins Grid -->
+                <div>
+                    <h4 class="text-xs font-bold text-morandiSubText uppercase tracking-wider mb-3">獨立單款外掛載點</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        
+                        <!-- Plugin 1: WHY Sync -->
+                        <div id="hub-card-sync" class="bg-white rounded-xl border border-morandiBorder p-5 flex flex-col justify-between hover:border-mBlue/60 hover:shadow-sm transition-all space-y-4">
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-mBlue"></span>
+                                    <span class="text-[10px] font-mono text-morandiSubText">Revit ⇄ Navisworks</span>
+                                </div>
+                                <h5 class="font-bold text-morandiText text-sm">外掛 1：WHY Sync 同步工具</h5>
+                                <p class="text-xs text-morandiSubText leading-relaxed">
+                                    雙向視角同動、剖面框連動、即時鏡像。大幅縮短跨軟體對位時間。
+                                </p>
+                            </div>
+                            <div class="space-y-2 pt-2 border-t border-morandiBorder/60">
+                                <span class="block text-[10px] font-mono text-morandiSubText truncate">WHY_Sync_Setup.zip</span>
+                                <a id="hub-dl-sync-primary" href="downloads/WHY_Sync_Setup.zip" download class="block w-full py-2.5 px-3 rounded bg-mBlue text-white font-medium text-center hover:bg-morandiText transition-colors shadow-sm">
+                                    🚀 主載點 (直接下載)
+                                </a>
+                                <a id="hub-dl-sync-mirror" href="#" onclick="handleMirrorClick(event, this)" target="_blank" class="block w-full py-2 px-3 rounded border border-morandiBorder bg-morandiBg text-morandiSubText hover:text-mBlue text-center transition-colors">
+                                    ☁️ 雲端備用載點
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Plugin 2: NWC Z-Slider -->
+                        <div id="hub-card-slider" class="bg-white rounded-xl border border-morandiBorder p-5 flex flex-col justify-between hover:border-mGreen/60 hover:shadow-sm transition-all space-y-4">
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-mGreen"></span>
+                                    <span class="text-[10px] font-mono text-morandiSubText">Navisworks Manage</span>
+                                </div>
+                                <h5 class="font-bold text-morandiText text-sm">外掛 2：NWC Z軸剖面移動滑桿</h5>
+                                <p class="text-xs text-morandiSubText leading-relaxed">
+                                    視覺化滑桿微調高度、定額公分切換、一鍵緊湊貼齊物件邊界。
+                                </p>
+                            </div>
+                            <div class="space-y-2 pt-2 border-t border-morandiBorder/60">
+                                <span class="block text-[10px] font-mono text-morandiSubText truncate">NWC_Z_Slider_Setup.zip</span>
+                                <a id="hub-dl-slider-primary" href="downloads/NWC_Z_Slider_Setup.zip" download class="block w-full py-2.5 px-3 rounded bg-mGreen text-white font-medium text-center hover:bg-morandiText transition-colors shadow-sm">
+                                    🚀 主載點 (直接下載)
+                                </a>
+                                <a id="hub-dl-slider-mirror" href="#" onclick="handleMirrorClick(event, this)" target="_blank" class="block w-full py-2 px-3 rounded border border-morandiBorder bg-morandiBg text-morandiSubText hover:text-mGreen text-center transition-colors">
+                                    ☁️ 雲端備用載點
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Plugin 3: NWC Data Monitor HUD -->
+                        <div id="hub-card-monitor" class="bg-white rounded-xl border border-morandiBorder p-5 flex flex-col justify-between hover:border-mTaupe/60 hover:shadow-sm transition-all space-y-4">
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-mTaupe"></span>
+                                    <span class="text-[10px] font-mono text-morandiSubText">Navisworks Manage</span>
+                                </div>
+                                <h5 class="font-bold text-morandiText text-sm">外掛 3：NWC 數據面板監測 (HUD)</h5>
+                                <p class="text-xs text-morandiSubText leading-relaxed">
+                                    游標懸浮即時讀取管徑、坡度、高程，無須反覆點選屬性樹。
+                                </p>
+                            </div>
+                            <div class="space-y-2 pt-2 border-t border-morandiBorder/60">
+                                <span class="block text-[10px] font-mono text-morandiSubText truncate">NWC_Data_Monitor_Setup.zip</span>
+                                <a id="hub-dl-monitor-primary" href="downloads/NWC_Data_Monitor_Setup.zip" download class="block w-full py-2.5 px-3 rounded bg-mTaupe text-white font-medium text-center hover:bg-morandiText transition-colors shadow-sm">
+                                    🚀 主載點 (直接下載)
+                                </a>
+                                <a id="hub-dl-monitor-mirror" href="#" onclick="handleMirrorClick(event, this)" target="_blank" class="block w-full py-2 px-3 rounded border border-morandiBorder bg-morandiBg text-morandiSubText hover:text-mTaupe text-center transition-colors">
+                                    ☁️ 雲端備用載點
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 3. Guidance & Help Panel -->
+                <div class="p-4 rounded-xl border border-morandiBorder bg-morandiBg/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <div class="flex items-center space-x-1.5 font-bold text-morandiText">
+                            <span>💡 安裝與試用提示</span>
+                        </div>
+                        <p class="text-[11px] text-morandiSubText leading-relaxed">
+                            下載壓縮檔解壓後，執行資料夾內之 <code class="bg-white px-1 py-0.5 rounded border border-morandiBorder font-mono">一鍵安裝輔助.exe</code> 即可完成安裝。啟動軟體將自動啟用 14 天免費試用期。
+                        </p>
+                    </div>
+                    <div class="flex items-center space-x-2 flex-shrink-0">
+                        <button type="button" onclick="closeDownloadHub(); document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });" class="px-3.5 py-2 rounded bg-white hover:bg-morandiBorder/50 border border-morandiBorder text-morandiText text-xs font-medium transition-colors">
+                            💬 聯絡我們 / 洽詢報價
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Logic Script -->
+    <script>
+        // Download Hub Modal Controls
+        function openDownloadHub(preset) {
+            const modal = document.getElementById('download-hub-modal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+            if (preset) {
+                const targetCard = document.getElementById(`hub-card-${preset}`);
+                if (targetCard) {
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    targetCard.classList.add('ring-2', 'ring-mBlue');
+                    setTimeout(() => targetCard.classList.remove('ring-2', 'ring-mBlue'), 2000);
+                }
+            }
+        }
+
+        function closeDownloadHub() {
+            const modal = document.getElementById('download-hub-modal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function handleMirrorClick(e, linkEl) {
+            const url = linkEl.getAttribute('href');
+            if (!url || url === '#' || url === '') {
+                e.preventDefault();
+                alert('💡 雲端備用載點尚未設定或正在更新中，請點擊「🚀 主載點」進行直接高速下載！');
+            }
+        }
+
+        // Close Download Hub Modal on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeDownloadHub();
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            // Change svg icon between hamburger and close
+            if (mobileMenu.classList.contains('hidden')) {
+                menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+            } else {
+                menuIcon.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+            }
+        });
+
+        // Close mobile menu on click nav links
+        const navLinks = mobileMenu.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+            });
+        });
+
+        // Interactive Z-Axis Slider logic
+        const zSlider = document.getElementById('z-slider');
+        const heightDisplay = document.getElementById('height-display');
+        const sliceOverlay = document.getElementById('slice-overlay');
+        const sectionPlane = document.getElementById('section-plane');
+        
+        // Target SVGs
+        const ductT2 = document.getElementById('duct-t2');
+        const pipeT2 = document.getElementById('pipe-t2');
+        const ductT1 = document.getElementById('duct-t1');
+        const pipeT1 = document.getElementById('pipe-t1');
+
+        zSlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            
+            // Move red line SVG group (val matches the scale 10 to 130)
+            sectionPlane.setAttribute('transform', `translate(0, ${val - 50})`);
+            
+            // Map slider value (10 to 130) to elevation heights (0 to 6000mm)
+            const percentage = (130 - val) / 120; // 0 (bottom) to 1 (top)
+            const heightMM = Math.round(percentage * 6000);
+            heightDisplay.innerText = `FL + ${heightMM.toLocaleString()} mm`;
+
+            // Adjust crop overlay height on the view (0px to 144px)
+            const overlayHeight = (val / 130) * 144;
+            sliceOverlay.style.height = `${overlayHeight}px`;
+
+            // Dynamic opacity representing slice plane cuts
+            // HVAC Duct Level 2 (y is 38 to 53)
+            if (val > 38 && val < 53) {
+                ductT2.setAttribute('fill-opacity', '0.35');
+            } else if (val <= 38) {
+                ductT2.setAttribute('fill-opacity', '0.08');
+            } else {
+                ductT2.setAttribute('fill-opacity', '0.8');
+            }
+
+            // Pipe Level 2 (y is 58 to 64)
+            if (val > 58 && val < 64) {
+                pipeT2.setAttribute('fill-opacity', '0.35');
+            } else if (val <= 58) {
+                pipeT2.setAttribute('fill-opacity', '0.08');
+            } else {
+                pipeT2.setAttribute('fill-opacity', '0.8');
+            }
+
+            // HVAC Duct Level 1 (y is 80 to 95)
+            if (val > 80 && val < 95) {
+                ductT1.setAttribute('fill-opacity', '0.35');
+            } else if (val <= 80) {
+                ductT1.setAttribute('fill-opacity', '0.08');
+            } else {
+                ductT1.setAttribute('fill-opacity', '0.8');
+            }
+
+            // Pipe Level 1 (y is 100 to 106)
+            if (val > 100 && val < 106) {
+                pipeT1.setAttribute('fill-opacity', '0.35');
+            } else if (val <= 100) {
+                pipeT1.setAttribute('fill-opacity', '0.08');
+            } else {
+                pipeT1.setAttribute('fill-opacity', '0.8');
+            }
+        });
+
+        // Initialize slider state
+        zSlider.dispatchEvent(new Event('input'));
+
+
+        // Interactive Data Monitor selection logic
+        const pipeData = {
+            'A': {
+                name: '冰水管 CHWP-01 (Chilled Water Pipe)',
+                size: 'DN 150 mm (6 inches)',
+                elevation: 'FL + 4,250 mm',
+                file: 'WHY_HVAC_Model.nwc'
+            },
+            'B': {
+                name: '空調風管 HVD-04 (Supply Air Duct)',
+                size: '500 x 400 mm',
+                elevation: 'FL + 3,800 mm',
+                file: 'WHY_HVAC_Model.nwc'
+            },
+            'C': {
+                name: '消防幹管 FSP-02 (Fire Sprinkler Main)',
+                size: 'DN 80 mm (3 inches)',
+                elevation: 'FL + 4,800 mm',
+                file: 'WHY_FireProtection.nwc'
+            }
+        };
+
+        function selectPipe(pipeId) {
+            const data = pipeData[pipeId];
+            if (!data) return;
+
+            // Update UI fields
+            document.getElementById('m-name').innerText = data.name;
+            document.getElementById('m-size').innerText = data.size;
+            document.getElementById('m-elevation').innerText = data.elevation;
+            document.getElementById('m-file').innerText = data.file;
+
+            // Highlight pipe SVGs
+            resetPipeHighlight();
+            const group = document.getElementById(`pipe-${pipeId.toLowerCase()}`);
+            const rect = group.querySelector('rect');
+            rect.setAttribute('stroke', '#2D323A');
+            rect.setAttribute('stroke-width', '1');
+            rect.setAttribute('fill-opacity', '0.9');
+        }
+
+        function resetPipeHighlight() {
+            // Restore default rect states
+            const rectA = document.querySelector('#pipe-a rect');
+            rectA.setAttribute('fill', '#6C8294');
+            rectA.setAttribute('fill-opacity', '0.8');
+            rectA.removeAttribute('stroke');
+
+            const rectB = document.querySelector('#pipe-b rect');
+            rectB.setAttribute('fill', '#C2B0A2');
+            rectB.setAttribute('fill-opacity', '0.8');
+            rectB.removeAttribute('stroke');
+
+            const rectC = document.querySelector('#pipe-c rect');
+            rectC.setAttribute('fill', '#8BA38E');
+            rectC.setAttribute('fill-opacity', '0.8');
+            rectC.removeAttribute('stroke');
+        }
+
+
+        // Multi-Product Pricing Data Object (Aligned with exact docx pricing strategies & Bundle upsells)
+        const pricingData = {
+            sync: {
+                title: 'WHY Sync 跨軟體同步工具 (專業版)',
+                trialPrice: 'NT$ 0',
+                trialPeriod: ' / 14 天',
+                originalPrice: 'NT$ 4,500',
+                discountTag: '限時 67 折',
+                onlinePrice: 'NT$ 3,000',
+                onlinePeriod: ' / 年 / 帳號',
+                savingsText: '現省 NT$ 1,500 (最推薦雙向同步工具)',
+                enterpriseTitle: '企業單機買斷版',
+                enterpriseOriginal: 'NT$ 11,000',
+                enterpriseTag: '買斷優惠 72 折',
+                enterprisePrice: 'NT$ 8,000',
+                enterprisePeriod: ' / 單機永久',
+                enterpriseSavings: '第 2 年起年維護費 20% (主版本免費升級 1 年)',
+                features: {
+                    trial: [
+                        '14天專業版完整功能評估體驗',
+                        '範圍框複製並同步限制功能次數',
+                        '一鍵重新連結連結模型部分限制',
+                        '不支援柱位（Grid）多重區間搜尋定位',
+                        '不包含專人遠端技術支援'
+                    ],
+                    online: [
+                        'WHY Sync 專業版所有功能無限制使用',
+                        '支援 V2 多柱號及軸網區間自動化定位',
+                        'Revit 範圍框一鍵鏡射對齊至 NWC 視角',
+                        '外部連結模型（IFC/NWC/Revit）批次卸載',
+                        '支援線上浮動帳號隨專案進度跨電腦登入',
+                        '享有主版本升級與線上 Email 專屬技術支援'
+                    ],
+                    enterprise: [
+                        '完全免網際網路驗證運行（100% 離線驗證）',
+                        '支援加密鎖實體 Key 或區域網路隔離授權',
+                        '適合晶圓大廠建廠供應鏈與政府國防高資安案場',
+                        '享有到場安裝配置、團隊教育訓練與客製擴充對接',
+                        '企業吃到飽 Site License 合購特惠（請洽專人）'
+                    ]
+                }
+            },
+            slider: {
+                title: 'NWC Z軸剖面移動滑桿',
+                trialPrice: 'NT$ 0',
+                trialPeriod: ' / 14 天',
+                originalPrice: 'NT$ 2,200',
+                discountTag: '推廣優惠 68 折',
+                onlinePrice: 'NT$ 1,500',
+                onlinePeriod: ' / 年 / 帳號',
+                savingsText: '現省 NT$ 700 (低報銷門檻、超高工時回報)',
+                enterpriseTitle: '企業單機買斷版',
+                enterpriseOriginal: 'NT$ 5,500',
+                enterpriseTag: '買斷優惠 7 折',
+                enterprisePrice: 'NT$ 3,900',
+                enterprisePeriod: ' / 單機永久',
+                enterpriseSavings: '第 2 年起年維護費 20% (首年享軟體版本免費更新)',
+                features: {
+                    trial: [
+                        '14天無段剖面阻尼滑桿功能評估',
+                        '僅支援單一 NWC 模型載入時操作',
+                        '不支援常用剖面高程快捷設定',
+                        '不包含專人遠端技術支援'
+                    ],
+                    online: [
+                        'Z軸剖面拉桿全部功能無限制使用',
+                        '直覺阻尼滑動，超大廠區模型剪切無延遲',
+                        '支援常用高度基準面自訂與一鍵快捷跳轉',
+                        '線上浮動帳號綁定，視專案席位靈活彈性切換',
+                        '享有主版本升級與線上 Email 專人售後'
+                    ],
+                    enterprise: [
+                        '完全離線機器碼授權驗證（100% 免網連）',
+                        '適用台積電無塵室建廠案場等高資安禁網環境',
+                        '享有到場安裝調試與客製化剖切阻尼參數設定',
+                        '買斷授權提供完整硬體機器鎖對齊，保障終身使用'
+                    ]
+                }
+            },
+            monitor: {
+                title: 'NWC 數據面板監測',
+                trialPrice: 'NT$ 0',
+                trialPeriod: ' / 14 天',
+                originalPrice: 'NT$ 3,600',
+                discountTag: '推廣優惠 67 折',
+                onlinePrice: 'NT$ 2,400',
+                onlinePeriod: ' / 年 / 帳號',
+                savingsText: '現省 NT$ 1,200 (平均每月僅約 NT$ 200)',
+                enterpriseTitle: '企業單機買斷版',
+                enterpriseOriginal: 'NT$ 9,800',
+                enterpriseTag: '買斷優惠 71 折',
+                enterprisePrice: 'NT$ 7,000',
+                enterprisePeriod: ' / 單機永久',
+                enterpriseSavings: '提供 5~10 套企業包套團體方案（NT$ 35,000）',
+                features: {
+                    trial: [
+                        '14天 HUD 即時屬性看板體驗',
+                        '每日元件點擊抓取數據次數有限',
+                        '不支援自訂面板屬性過濾欄位',
+                        '不包含專人遠端技術支援'
+                    ],
+                    online: [
+                        '即時屬性看板隨選即看無次數限制',
+                        '滑過即現，免去原生點擊 4 層屬性標籤的疲勞',
+                        '精確顯示絕對物理高程、系統別、管外徑等資訊',
+                        '線上浮動帳號綁定，支援專案席位靈活調配',
+                        '享有主版本升級與線上 Email 技術售後'
+                    ],
+                    enterprise: [
+                        '完全免聯網離線授權（機器碼/隔離區網伺服器）',
+                        '支援與營造廠專案管理平台或 ERP 數據庫對接',
+                        '單套即享完整永久買斷權益，無須年年重續訂閱',
+                        '適合晶圓大廠或大團隊，可選配 Site License 方案'
+                    ]
+                }
+            },
+            bundle: {
+                title: '🚩 三合一高效同捆包 (BIM Ultimate Bundle)',
+                trialPrice: 'NT$ 0',
+                trialPeriod: ' / 14 天',
+                originalPrice: 'NT$ 6,900',
+                discountTag: '超值 72 折',
+                onlinePrice: 'NT$ 4,990',
+                onlinePeriod: ' / 年 / 帳號',
+                savingsText: '現省 NT$ 1,910！(低於 Sync+數據面板 總和 $5,400，買兩套直接送一套)',
+                enterpriseTitle: '企業買斷同捆包',
+                enterpriseOriginal: 'NT$ 18,900',
+                enterpriseTag: '限時 73 折・免簽呈特惠',
+                enterprisePrice: 'NT$ 13,900',
+                enterprisePeriod: ' / 單機永久',
+                enterpriseSavings: '現省 NT$ 5,000！(總價壓在 1.5 萬以下，免總部審批簽核)',
+                features: {
+                    trial: [
+                        '14天全套三款外掛完整功能評估',
+                        '包含 WHY Sync + 剖面滑桿 + 屬性面板',
+                        '不包含專人遠端技術支援及現場客製對接'
+                    ],
+                    online: [
+                        '三款高效外掛全部功能無限制使用',
+                        '比分開單買更划算，現享 28% 折扣率鎖定生態系',
+                        '★「首 30 天無痛升級」：可先買單套，首月直接補差價升級',
+                        '支援線上浮動帳號隨專案進度跨電腦登入授權',
+                        '享有主版本升級與優先線上 Email 技術支援'
+                    ],
+                    enterprise: [
+                        '100% 離線機器碼驗證授權（高資安無網路運作）',
+                        '★「閃避冗長簽核線」：單套 $13,900 完美避開 1.5 萬簽審關卡',
+                        '專案經理或 BIM 主管可用課級主管權限或零用金快速申購報銷',
+                        '三款外掛永久買斷授權，首年主要版本免費升級',
+                        '第二年起可選配年維護合約，保障新軟體年份更新相容'
+                    ]
+                }
+            }
+        };
+
+        function changePricingTab(productId) {
+            const data = pricingData[productId];
+            if (!data) return;
+
+            // Update Tab buttons visual states (Supports 4 buttons now)
+            const products = ['sync', 'slider', 'monitor', 'bundle'];
+            products.forEach(p => {
+                const btn = document.getElementById(`tab-${p}`);
+                if (p === productId) {
+                    if (p === 'bundle') {
+                        // Highlight bundle uniquely in Morandi Pink/Orange
+                        btn.className = "flex-1 min-w-[170px] px-5 py-3 rounded text-xs font-bold border border-mOrange bg-mOrange text-white shadow-sm transition-all duration-300 flex items-center justify-center space-x-1";
+                    } else {
+                        btn.className = "flex-1 min-w-[130px] px-5 py-3 rounded text-xs font-semibold border border-mBlue bg-mBlue text-white shadow-sm transition-all duration-300";
+                    }
+                } else {
+                    if (p === 'bundle') {
+                        btn.className = "flex-1 min-w-[170px] px-5 py-3 rounded text-xs font-bold border border-mOrange bg-mOrange/10 text-mOrange hover:bg-mOrange hover:text-white transition-all duration-300 flex items-center justify-center space-x-1";
+                    } else {
+                        btn.className = "flex-1 min-w-[130px] px-5 py-3 rounded text-xs font-semibold border border-morandiBorder bg-morandiBg text-morandiSubText hover:border-mBlue transition-all duration-300";
+                    }
+                }
+            });
+
+            // Update Header labels
+            document.getElementById('pricing-desc-title').innerText = data.title;
+
+            // Update Prices & Periods (Trial Card)
+            document.getElementById('price-trial').innerText = data.trialPrice;
+            document.getElementById('period-trial').innerText = data.trialPeriod;
+
+            // Update original price & savings dynamically (Online Card)
+            document.getElementById('price-original').innerText = data.originalPrice;
+            document.getElementById('discount-tag').innerText = data.discountTag;
+            document.getElementById('price-online').innerText = data.onlinePrice;
+            document.getElementById('period-online').innerText = data.onlinePeriod;
+            document.getElementById('price-savings').innerText = data.savingsText;
+
+            // Update Enterprise Card (Card 3) dynamically
+            document.getElementById('title-enterprise').innerText = data.enterpriseTitle;
+            
+            if (data.enterpriseOriginal) {
+                document.getElementById('price-original-ent').style.display = 'inline';
+                document.getElementById('price-original-ent').innerText = data.enterpriseOriginal;
+            } else {
+                document.getElementById('price-original-ent').style.display = 'none';
+            }
+
+            if (data.enterpriseTag) {
+                document.getElementById('discount-tag-ent').style.display = 'inline';
+                document.getElementById('discount-tag-ent').innerText = data.enterpriseTag;
+            } else {
+                document.getElementById('discount-tag-ent').style.display = 'none';
+            }
+
+            document.getElementById('price-enterprise').innerText = data.enterprisePrice;
+            document.getElementById('period-enterprise').innerText = data.enterprisePeriod;
+            
+            document.getElementById('price-savings-ent').innerText = data.enterpriseSavings;
+            if (productId === 'bundle') {
+                document.getElementById('price-savings-ent').className = "text-[10px] text-mOrangeDark mt-1.5 font-medium";
+            } else {
+                document.getElementById('price-savings-ent').className = "text-[10px] text-mTaupe mt-1.5 font-medium";
+            }
+
+            // Re-render checklist features dynamically
+            renderFeaturesList('features-trial', data.features.trial, 'mBlue');
+            renderFeaturesList('features-online', data.features.online, 'mBlue');
+            renderFeaturesList('features-enterprise', data.features.enterprise, 'mTaupe');
+        }
+
+        function renderFeaturesList(containerId, list, colorName) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; // clear
+
+            const activeColorClass = colorName === 'mBlue' ? 'text-mBlue' : 'text-mTaupe';
+
+            list.forEach(feat => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start space-x-3 text-left';
+
+                const isExcluded = feat.startsWith('不支援') || feat.startsWith('不包含') || feat.startsWith('僅支援');
+                
+                if (isExcluded) {
+                    li.className += ' text-morandiBorder line-through';
+                    li.innerHTML = `
+                        <svg class="w-4 h-4 text-morandiBorder flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                        <span>${feat}</span>
+                    `;
+                } else {
+                    li.className += ' text-morandiSubText';
+                    
+                    // Highlight special features with star
+                    const hasStar = feat.startsWith('★');
+                    let iconHtml = `
+                        <svg class="w-4 h-4 ${activeColorClass} flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    `;
+                    if (hasStar) {
+                        iconHtml = `
+                            <span class="text-mOrange font-bold text-sm leading-none flex-shrink-0 mt-0.5">★</span>
+                        `;
+                    }
+                    
+                    li.innerHTML = `
+                        ${iconHtml}
+                        <span>${feat}</span>
+                    `;
+                }
+                container.appendChild(li);
+            });
+        }
+
+        // Dynamic Pricing Settings (Synced with admin.html Pricing Tab)
+        function loadCustomPricing() {
+            try {
+                const storedPricing = JSON.parse(localStorage.getItem('whybim_pricing') || '{}');
+                ['sync', 'slider', 'monitor', 'bundle'].forEach(pKey => {
+                    if (storedPricing[pKey]) {
+                        pricingData[pKey] = {
+                            ...pricingData[pKey],
+                            ...storedPricing[pKey]
+                        };
+                    }
+                });
+
+                // Sync Bundle Promotion Banner
+                if (storedPricing.banner) {
+                    const b = storedPricing.banner;
+                    if (b.tag && document.getElementById('bundle-banner-tag')) document.getElementById('bundle-banner-tag').innerText = b.tag;
+                    if (b.title && document.getElementById('bundle-banner-title')) document.getElementById('bundle-banner-title').innerText = b.title;
+                    if (b.desc && document.getElementById('bundle-banner-desc')) document.getElementById('bundle-banner-desc').innerText = b.desc;
+                    if (b.original && document.getElementById('bundle-banner-original')) document.getElementById('bundle-banner-original').innerText = b.original;
+                    if (b.price && document.getElementById('bundle-banner-price')) document.getElementById('bundle-banner-price').innerText = b.price;
+                    if (b.period && document.getElementById('bundle-banner-period')) document.getElementById('bundle-banner-period').innerText = b.period;
+                    if (b.savings && document.getElementById('bundle-banner-savings')) document.getElementById('bundle-banner-savings').innerText = b.savings;
+                }
+
+                // Update contact dropdown labels
+                const optMap = {
+                    'sync-online': `WHY Sync 同步工具 - 線上訂閱版 (${pricingData.sync.onlinePrice}${pricingData.sync.onlinePeriod})`,
+                    'sync-offline': `WHY Sync 同步工具 - 企業單機買斷版 (${pricingData.sync.enterprisePrice}${pricingData.sync.enterprisePeriod})`,
+                    'slider-online': `NWC Z軸剖面滑桿 - 線上訂閱版 (${pricingData.slider.onlinePrice}${pricingData.slider.onlinePeriod})`,
+                    'slider-offline': `NWC Z軸剖面滑桿 - 企業單機買斷版 (${pricingData.slider.enterprisePrice}${pricingData.slider.enterprisePeriod})`,
+                    'monitor-online': `NWC 數據面板監測 - 線上訂閱版 (${pricingData.monitor.onlinePrice}${pricingData.monitor.onlinePeriod})`,
+                    'monitor-offline': `NWC 數據面板監測 - 企業單機買斷版 (${pricingData.monitor.enterprisePrice}${pricingData.monitor.enterprisePeriod})`,
+                    'bundle-online': `三合一高效同捆包 - 線上訂閱版 (${pricingData.bundle.onlinePrice}${pricingData.bundle.onlinePeriod} - 推薦)`,
+                    'bundle-offline': `三合一高效同捆包 - 企業買斷版 (${pricingData.bundle.enterprisePrice}${pricingData.bundle.enterprisePeriod} - 免簽呈推薦)`
+                };
+                const sel = document.getElementById('interest');
+                if (sel) {
+                    Array.from(sel.options).forEach(opt => {
+                        if (optMap[opt.value]) {
+                            opt.text = optMap[opt.value];
+                        }
+                    });
+                }
+            } catch(e) {
+                console.warn('Error applying custom pricing:', e);
+            }
+        }
+
+        // Initialize Pricing content & Website settings once page finishes loading
+        window.addEventListener('DOMContentLoaded', () => {
+            loadCustomPricing();
+            changePricingTab('sync');
+            loadWebsiteSettings();
+        });
+
+        // Dynamic Website Settings & 4 Video/Media Loaders (Synced with admin.html)
+        function loadWebsiteSettings() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('whybim_settings') || '{}');
+                
+                function getYoutubeId(str) {
+                    if (!str) return '';
+                    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                    const match = str.match(regExp);
+                    if (match && match[2].length === 11) return match[2];
+                    if (str.length === 11) return str;
+                    return str;
+                }
+
+                // 4 Media Slots (Hero + 3 Plugins) with live defaults for GitHub Pages
+                const slots = [
+                    {
+                        containerId: 'hero-video-container',
+                        config: settings.hero || {
+                            type: 'mp4',
+                            url: 'videos/z軸剖面示範.mp4'
+                        },
+                        defaultAlt: 'WHY BIM 核心展示'
+                    },
+                    {
+                        containerId: 'sync-gif-container',
+                        config: (settings.sync && settings.sync.url) ? settings.sync : {
+                            type: 'mp4',
+                            url: 'videos/WHY_Sync_操作.mp4'
+                        },
+                        defaultAlt: 'WHY Sync 跨軟體同步操作分享'
+                    },
+                    {
+                        containerId: 'slider-media-container',
+                        config: (settings.slider && settings.slider.url) ? settings.slider : {
+                            type: 'mp4',
+                            url: 'videos/z軸剖面示範.mp4'
+                        },
+                        defaultAlt: 'NWC Z軸剖面移動滑桿操作分享'
+                    },
+                    {
+                        containerId: 'monitor-media-container',
+                        config: (settings.monitor && settings.monitor.url) ? settings.monitor : {
+                            type: 'mp4',
+                            url: ''
+                        },
+                        defaultAlt: 'NWC 數據面板監測操作分享'
+                    }
+                ];
+
+                slots.forEach(slot => {
+                    const container = document.getElementById(slot.containerId);
+                    if (!container) return;
+                    const cfg = slot.config;
+                    if (!cfg || !cfg.url || !cfg.url.trim()) return; // Keep default design or interactive demo
+
+                    let url = cfg.url.replace(/"/g, '').trim();
+                    const type = cfg.type || 'mp4';
+
+                    // Auto-normalize relative paths (e.g. if user forgot "videos/" or ".mp4")
+                    if (type === 'mp4') {
+                        if (!url.includes('.') && !url.startsWith('http')) {
+                            url += '.mp4';
+                        }
+                        if (!url.includes('/') && !url.includes('\\') && !url.startsWith('http')) {
+                            url = 'videos/' + url;
+                        }
+                    } else if (type === 'gif') {
+                        if (!url.includes('.') && !url.startsWith('http')) {
+                            url += '.gif';
+                        }
+                        if (!url.includes('/') && !url.includes('\\') && !url.startsWith('http')) {
+                            url = 'images/' + url;
+                        }
+                    }
+
+                    container.className = "aspect-video bg-black flex items-center justify-center relative overflow-hidden";
+
+                    if (type === 'mp4') {
+                        const altUrl = url.startsWith('13_網頁設計/') ? url.replace('13_網頁設計/', '') : ('13_網頁設計/' + url);
+                        container.innerHTML = `
+                            <video autoplay loop muted playsinline class="w-full h-full object-cover">
+                                <source src="${url}" type="video/mp4">
+                                <source src="${altUrl}" type="video/mp4">
+                                您的瀏覽器不支援播放此影片。
+                            </video>
+                        `;
+                    } else if (type === 'youtube') {
+                        const vid = getYoutubeId(url);
+                        if (vid) {
+                            container.innerHTML = `
+                                <iframe 
+                                    class="w-full h-full" 
+                                    src="https://www.youtube.com/embed/${vid}?autoplay=1&mute=1&loop=1&playlist=${vid}&controls=1&rel=0" 
+                                    title="${slot.defaultAlt}" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                </iframe>
+                            `;
+                        }
+                    } else if (type === 'gif') {
+                        container.innerHTML = `
+                            <img src="${url}" alt="${slot.defaultAlt}" class="w-full h-full object-cover">
+                        `;
+                    }
+                });
+
+                // Sync contact email if configured
+                if (settings.contactEmail && document.getElementById('contact-email-text')) {
+                    document.getElementById('contact-email-text').innerText = settings.contactEmail;
+                }
+
+                // Sync installer download URLs for Download Hub
+                const defaultDl = {
+                    bundle: { primary: 'downloads/WHY_BIM_Bundle_Setup.zip', mirror: '' },
+                    sync: { primary: 'downloads/WHY_Sync_Setup.zip', mirror: '' },
+                    slider: { primary: 'downloads/NWC_Z_Slider_Setup.zip', mirror: '' },
+                    monitor: { primary: 'downloads/NWC_Data_Monitor_Setup.zip', mirror: '' }
+                };
+                const dlUrls = settings.downloadUrls || defaultDl;
+
+                const bindDownloadBtn = (id, url, fallbackUrl) => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    const finalUrl = (url && url.trim()) ? url.trim() : fallbackUrl;
+                    if (finalUrl) {
+                        el.href = finalUrl;
+                        if (finalUrl.startsWith('http')) {
+                            el.target = '_blank';
+                            el.removeAttribute('download');
+                        } else {
+                            el.setAttribute('download', '');
+                            el.removeAttribute('target');
+                        }
+                    } else {
+                        el.href = '#';
+                    }
+                };
+
+                // Bind all download buttons
+                const bundlePrimaryUrl = dlUrls.bundle?.primary || settings.installerUrl || 'downloads/WHY_BIM_Bundle_Setup.zip';
+                bindDownloadBtn('hub-dl-bundle-primary', bundlePrimaryUrl, 'downloads/WHY_BIM_Bundle_Setup.zip');
+                bindDownloadBtn('hub-dl-bundle-mirror', dlUrls.bundle?.mirror, '');
+
+                bindDownloadBtn('hub-dl-sync-primary', dlUrls.sync?.primary, 'downloads/WHY_Sync_Setup.zip');
+                bindDownloadBtn('hub-dl-sync-mirror', dlUrls.sync?.mirror, '');
+
+                bindDownloadBtn('hub-dl-slider-primary', dlUrls.slider?.primary, 'downloads/NWC_Z_Slider_Setup.zip');
+                bindDownloadBtn('hub-dl-slider-mirror', dlUrls.slider?.mirror, '');
+
+                bindDownloadBtn('hub-dl-monitor-primary', dlUrls.monitor?.primary, 'downloads/NWC_Data_Monitor_Setup.zip');
+                bindDownloadBtn('hub-dl-monitor-mirror', dlUrls.monitor?.mirror, '');
+
+                // Backwards compatibility for legacy download links
+                ['btn-download-installer', 'plan-direct-download'].forEach(btnId => {
+                    const btn = document.getElementById(btnId);
+                    if (btn) {
+                        btn.href = bundlePrimaryUrl;
+                        if (bundlePrimaryUrl.startsWith('http')) {
+                            btn.removeAttribute('download');
+                            btn.target = '_blank';
+                        } else {
+                            btn.setAttribute('download', '');
+                            btn.removeAttribute('target');
+                        }
+                    }
+                });
+
+                // Dynamic Copywriting Sync (from admin.html CMS)
+                const copywriting = JSON.parse(localStorage.getItem('whybim_copywriting') || '{}');
+                const copyMap = [
+                    // Hero
+                    { id: 'hero-tag-text', val: copywriting.heroTag },
+                    { id: 'hero-title-text', val: copywriting.heroTitle },
+                    { id: 'hero-subtitle-text', val: copywriting.heroSubtitle },
+                    { id: 'hero-trial-btn-text', val: copywriting.heroTrialBtn },
+                    { id: 'hero-pricing-btn-text', val: copywriting.heroPricingBtn },
+                    { id: 'hero-trust-label', val: copywriting.heroTrustLabel },
+                    { id: 'hero-trust-revit', val: copywriting.heroTrustRevit },
+                    { id: 'hero-trust-navis', val: copywriting.heroTrustNavis },
+
+                    // Products Header
+                    { id: 'products-tag-text', val: copywriting.productsTag },
+                    { id: 'products-title-text', val: copywriting.productsTitle },
+                    { id: 'products-desc-text', val: copywriting.productsDesc },
+
+                    // WHY Sync
+                    { id: 'sync-tag-text', val: copywriting.syncTag },
+                    { id: 'sync-title-text', val: copywriting.syncTitle },
+                    { id: 'sync-desc-text', val: copywriting.syncDesc },
+                    { id: 'sync-f1-title', val: copywriting.syncF1Title },
+                    { id: 'sync-f1-desc', val: copywriting.syncF1Desc },
+                    { id: 'sync-f2-title', val: copywriting.syncF2Title },
+                    { id: 'sync-f2-desc', val: copywriting.syncF2Desc },
+                    { id: 'sync-f3-title', val: copywriting.syncF3Title },
+                    { id: 'sync-f3-desc', val: copywriting.syncF3Desc },
+                    { id: 'sync-f4-title', val: copywriting.syncF4Title },
+                    { id: 'sync-f4-desc', val: copywriting.syncF4Desc },
+                    { id: 'sync-f5-title', val: copywriting.syncF5Title },
+                    { id: 'sync-f5-desc', val: copywriting.syncF5Desc },
+
+                    // Z-Axis Slider
+                    { id: 'slider-tag-text', val: copywriting.sliderTag },
+                    { id: 'slider-title-text', val: copywriting.sliderTitle },
+                    { id: 'slider-desc-text', val: copywriting.sliderDesc },
+                    { id: 'slider-f1-text', val: copywriting.sliderF1Text },
+                    { id: 'slider-f2-text', val: copywriting.sliderF2Text },
+                    { id: 'slider-f3-text', val: copywriting.sliderF3Text },
+
+                    // Data Panel Monitor
+                    { id: 'monitor-tag-text', val: copywriting.monitorTag },
+                    { id: 'monitor-title-text', val: copywriting.monitorTitle },
+                    { id: 'monitor-desc-text', val: copywriting.monitorDesc },
+                    { id: 'monitor-f1-text', val: copywriting.monitorF1Text },
+                    { id: 'monitor-f2-text', val: copywriting.monitorF2Text },
+                    { id: 'monitor-f3-text', val: copywriting.monitorF3Text },
+
+                    // Contact Section
+                    { id: 'contact-tag-text', val: copywriting.contactTag },
+                    { id: 'contact-title-text', val: copywriting.contactTitle },
+                    { id: 'contact-intro-text', val: copywriting.contactIntro },
+                    { id: 'contact-email-label', val: copywriting.contactEmailLabel },
+                    { id: 'contact-email-text', val: copywriting.contactEmailText },
+                    { id: 'contact-location-label', val: copywriting.contactLocationLabel },
+                    { id: 'contact-location-text', val: copywriting.contactLocationText }
+                ];
+
+                copyMap.forEach(item => {
+                    if (item.val !== undefined && item.val !== null && item.val.trim() !== '') {
+                        const el = document.getElementById(item.id);
+                        if (el) el.innerHTML = item.val;
+                    }
+                });
+
+            } catch(err) {
+                console.warn('Could not load website settings:', err);
+            }
+        }
+
+        // Contact Form Handlers - Automatically syncs with admin.html (CRM)
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const company = document.getElementById('company').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const interestSelect = document.getElementById('interest');
+            const interestText = interestSelect.options[interestSelect.selectedIndex].text;
+            const message = document.getElementById('message').value.trim();
+
+            const newLead = {
+                id: 'LEAD-' + Date.now().toString(36).toUpperCase(),
+                name: name,
+                company: company,
+                email: email,
+                interest: interestText,
+                message: message,
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                const existingLeads = JSON.parse(localStorage.getItem('whybim_leads') || '[]');
+                existingLeads.unshift(newLead);
+                localStorage.setItem('whybim_leads', JSON.stringify(existingLeads));
+            } catch(err) {
+                console.error('Failed to sync lead to localStorage:', err);
+            }
+
+            // Live Webhook Sync to Google Sheets
+            try {
+                const settings = JSON.parse(localStorage.getItem('whybim_settings') || '{}');
+                const defaultWebhook = 'https://script.google.com/macros/s/AKfycbzaXV27F_PzDFQMCMQCwfF4GPswwqIcJrBnTlA5sseGfMotHNHZ8nhaT3DrwaMKfm3d/exec';
+                const webhookUrl = (settings.googleSheetUrl && settings.googleSheetUrl.trim()) ? settings.googleSheetUrl.trim() : defaultWebhook;
+
+                if (webhookUrl && webhookUrl.startsWith('http')) {
+                    fetch(webhookUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newLead)
+                    }).catch(err => console.warn('Google Sheets sync notice:', err));
+                }
+            } catch(err) {
+                console.warn('Google Sheets sync check skipped:', err);
+            }
+
+            // Show the success panel
+            document.getElementById('form-success').classList.remove('hidden');
+        }
+
+        // Reset Contact form
+        function resetForm() {
+            document.getElementById('contact-form').reset();
+            document.getElementById('form-success').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
