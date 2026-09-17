@@ -775,6 +775,9 @@
                     </div>
 
                     <div class="pt-4 border-t border-morandiBorder flex justify-end space-x-3">
+                        <button type="button" onclick="exportStaticIndexHtml()" class="px-5 py-2.5 rounded bg-morandiText text-white text-xs font-semibold hover:bg-black transition-colors shadow-sm flex items-center space-x-1.5">
+                            <span>📦 打包下載最新 index.html</span>
+                        </button>
                         <button onclick="saveWebsiteSettings()" class="px-6 py-2.5 rounded bg-mBlue text-white text-xs font-semibold hover:bg-morandiText transition-colors shadow-sm">
                             保存設定並同步至官網
                         </button>
@@ -2960,6 +2963,53 @@ support@whybim.com`;
 
             localStorage.setItem('whybim_settings', JSON.stringify(settings));
             showToast('官網設定與安裝包載點已保存並同步至前台！');
+        }
+
+        async function exportStaticIndexHtml() {
+            saveWebsiteSettings();
+            try {
+                const response = await fetch('index.html');
+                if (!response.ok) throw new Error('Could not fetch index.html');
+                let html = await response.text();
+                
+                const settings = JSON.parse(localStorage.getItem('whybim_settings') || '{}');
+                const pricing = JSON.parse(localStorage.getItem('whybim_pricing') || '{}');
+                
+                const injection = `
+                <script>
+                    window.__EMBEDDED_SETTINGS__ = ${JSON.stringify(settings)};
+                    window.__EMBEDDED_PRICING__ = ${JSON.stringify(pricing)};
+                    try {
+                        if (window.__EMBEDDED_SETTINGS__) {
+                            const cur = JSON.parse(localStorage.getItem('whybim_settings') || '{}');
+                            localStorage.setItem('whybim_settings', JSON.stringify(Object.assign({}, window.__EMBEDDED_SETTINGS__, cur)));
+                        }
+                        if (window.__EMBEDDED_PRICING__) {
+                            const curP = JSON.parse(localStorage.getItem('whybim_pricing') || '{}');
+                            localStorage.setItem('whybim_pricing', JSON.stringify(Object.assign({}, window.__EMBEDDED_PRICING__, curP)));
+                        }
+                    } catch(e){}
+                <\/script>
+                `;
+                
+                if (html.includes('</head>')) {
+                    html = html.replace('</head>', injection + '\n</head>');
+                } else {
+                    html = injection + '\n' + html;
+                }
+                
+                const blob = new Blob([html], { type: 'text/html;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'index.html';
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('已打包下載最新 index.html！直接上傳覆蓋 GitHub 即可！');
+            } catch(e) {
+                console.error(e);
+                alert('因瀏覽器本地安全性限制，無法自動下載。請直接將本機資料夾內的 index.html 上傳至 GitHub 即可！');
+            }
         }
 
         function resetDemoData() {
