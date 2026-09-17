@@ -66,22 +66,6 @@
             transform: scale(1.2);
         }
     </style>
-
-                <script>
-                    window.__EMBEDDED_SETTINGS__ = {"googleSheetUrl":"https://script.google.com/macros/s/AKfycbzaXV27F_PzDFQMCMQCwfF4GPswwqIcJrBnTlA5sseGfMotHNHZ8nhaT3DrwaMKfm3d/exec","installerUrl":"downloads/WHY_BIM_Bundle_Setup.zip","downloadUrls":{"bundle":{"primary":"downloads/WHY_BIM_Bundle_Setup.zip","mirror":""},"sync":{"primary":"downloads/WHY_Sync_Setup.zip","mirror":""},"slider":{"primary":"downloads/NWC_Z_Slider_Setup.zip","mirror":""},"monitor":{"primary":"downloads/NWC_Data_Monitor_Setup.zip","mirror":""}},"contactEmail":"stevensteven2255@gmail.com","updatedAt":"2026-09-17T14:27:22.739Z","hero":{"type":"mp4","url":""},"sync":{"type":"mp4","url":"videos/WHY_Sync_操作.mp4\""},"slider":{"type":"mp4","url":"videos/z軸剖面示範.mp4\""},"monitor":{"type":"mp4","url":"videos/z軸剖面示範_公開版.mp4\""}};
-                    window.__EMBEDDED_PRICING__ = {"sync":{"title":"WHY Sync 跨軟體同步工具 (專業版)","trialPrice":"NT$ 0","trialPeriod":"/30 天","originalPrice":"NT$ 4,500","discountTag":"限時 67 折","onlinePrice":"NT$ 3,000","onlinePeriod":"/ 年 / 帳號","savingsText":"現省 NT$ 1,500 (最推薦雙向同步工具)","enterpriseTitle":"企業單機買斷版","enterpriseOriginal":"NT$ 11,000","enterpriseTag":"買斷優惠 72 折","enterprisePrice":"NT$ 8,000","enterprisePeriod":"/ 單機永久","enterpriseSavings":"第 2 年起年維護費 20% (主版本免費升級 1 年)"},"slider":{"title":"NWC Z軸剖面移動滑桿","trialPrice":"NT$ 0","trialPeriod":"/ 30天","originalPrice":"NT$ 2,200","discountTag":"推廣優惠 68 折","onlinePrice":"NT$ 1,500","onlinePeriod":"/ 年 / 帳號","savingsText":"現省 NT$ 700 (低報銷門檻、超高工時回報)","enterpriseTitle":"企業單機買斷版","enterpriseOriginal":"NT$ 5,500","enterpriseTag":"買斷優惠 7 折","enterprisePrice":"NT$ 3,900","enterprisePeriod":"/ 單機永久","enterpriseSavings":"第 2 年起年維護費 20% (首年享軟體版本免費更新)"},"monitor":{"title":"NWC 數據面板監測","trialPrice":"NT$ 0","trialPeriod":"/ 14 天","originalPrice":"NT$ 3,600","discountTag":"推廣優惠 67 折","onlinePrice":"NT$ 2,400","onlinePeriod":"/ 年 / 帳號","savingsText":"現省 NT$ 1,200 (平均每月僅約 NT$ 200)","enterpriseTitle":"企業單機買斷版","enterpriseOriginal":"NT$ 9,800","enterpriseTag":"買斷優惠 71 折","enterprisePrice":"NT$ 7,000","enterprisePeriod":"/ 單機永久","enterpriseSavings":"提供 5~10 套企業包套團體方案（NT$ 35,000）"},"bundle":{"title":"🚩 三合一高效同捆包 (BIM Ultimate Bundle)","trialPrice":"NT$ 0","trialPeriod":"/ 14 天","originalPrice":"NT$ 6,900","discountTag":"超值 72 折","onlinePrice":"NT$ 4,990","onlinePeriod":"/ 年 / 帳號","savingsText":"現省 NT$ 1,910！(低於 Sync+數據面板 總和 $5,400，買兩套直接送一套)","enterpriseTitle":"企業買斷同捆包","enterpriseOriginal":"NT$ 18,900","enterpriseTag":"限時 73 折・免簽呈特惠","enterprisePrice":"NT$ 13,900","enterprisePeriod":"/ 單機永久","enterpriseSavings":"現省 NT$ 5,000！(總價壓在 1.5 萬以下，免總部審批簽核)"},"banner":{"title":"WHY Sync 同步外掛 + Z軸剖面外掛 (年約合購)","tag":"雙外掛合購黃金套餐","desc":"「買同步外掛，半價加購 Z 軸剖面」。針對同時建模與衝突協商的 BIM 工程師首選。","original":"原價 NT$ 4,500","price":"NT$ 3,600","period":"/ 年","savings":"立享 8 折・現省 NT$ 900"}};
-                    try {
-                        if (window.__EMBEDDED_SETTINGS__) {
-                            const cur = JSON.parse(localStorage.getItem('whybim_settings') || '{}');
-                            localStorage.setItem('whybim_settings', JSON.stringify(Object.assign({}, window.__EMBEDDED_SETTINGS__, cur)));
-                        }
-                        if (window.__EMBEDDED_PRICING__) {
-                            const curP = JSON.parse(localStorage.getItem('whybim_pricing') || '{}');
-                            localStorage.setItem('whybim_pricing', JSON.stringify(Object.assign({}, window.__EMBEDDED_PRICING__, curP)));
-                        }
-                    } catch(e){}
-                </script>
-                
 </head>
 <body class="overflow-x-hidden antialiased">
 
@@ -108,7 +92,6 @@
                 <button onclick="openDownloadHub()" class="text-sm font-semibold text-mBlue hover:text-morandiText transition-colors duration-300 flex items-center space-x-1">
                     <span>🎮 軟體載點</span>
                 </button>
-                <a href="admin.html" class="text-xs font-semibold px-2.5 py-1 rounded bg-morandiCardBg border border-morandiBorder text-morandiSubText hover:border-mBlue hover:text-mBlue transition-all">後台管理 ⚙️</a>
             </nav>
 
             <!-- Actions -->
@@ -139,7 +122,6 @@
             <button onclick="openDownloadHub()" class="w-full text-left py-2.5 text-sm font-bold text-mBlue transition-all flex items-center space-x-1">
                 <span>🎮 軟體安裝包下載專區 (線上載點)</span>
             </button>
-            <a href="admin.html" class="block py-2.5 text-sm font-medium text-morandiSubText hover:text-mBlue transition-all">管理後台 ⚙️</a>
             <div class="pt-4 flex flex-col space-y-2.5">
                 <button onclick="openDownloadHub()" class="text-center py-3 rounded bg-mBlue text-xs font-semibold text-white hover:bg-morandiText transition-all shadow-sm flex items-center justify-center space-x-1">
                     <span>⚡ 直接下載安裝包 (載點)</span>
