@@ -759,7 +759,7 @@
                         <!-- Company Contact Email Setting -->
                         <div class="pt-4 border-t border-morandiBorder">
                             <label class="block font-semibold text-morandiText mb-1">官網客服 Email</label>
-                            <input type="email" id="setting-contact-email" value="support@whybim.com" class="w-full px-3.5 py-2 rounded border border-morandiBorder bg-morandiBg outline-none focus:border-mBlue">
+                            <input type="email" id="setting-contact-email" value="stevensteven2255@gmail.com" class="w-full px-3.5 py-2 rounded border border-morandiBorder bg-morandiBg outline-none focus:border-mBlue">
                         </div>
 
                         <!-- Reset Demo Data -->
@@ -1886,7 +1886,7 @@
                             <li>打開 Google 試算表，點擊選單【擴充功能】→【Apps Script】。</li>
                             <li>刪除預設代碼，貼上以下程式碼：</li>
                         </ol>
-                        <textarea id="apps-script-code" readonly rows="8" class="w-full p-2.5 rounded bg-white font-mono text-[10px] text-morandiText border border-morandiBorder select-all outline-none leading-relaxed">function doPost(e) {
+                        <textarea id="apps-script-code" readonly rows="12" class="w-full p-2.5 rounded bg-white font-mono text-[10px] text-morandiText border border-morandiBorder select-all outline-none leading-relaxed">function doPost(e) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var data = JSON.parse(e.postData.contents);
   var now = new Date();
@@ -1897,6 +1897,24 @@
   var formula = '=IF(ISBLANK(A' + nextRow + '), "", IF(TODAY() > DATEVALUE(A' + nextRow + ')+14, "🔴 已滿14天！逾期 " & (TODAY()-(DATEVALUE(A' + nextRow + ')+14)) & " 天", IF(TODAY() >= DATEVALUE(A' + nextRow + ')+11, "🟡 即將到期！剩 " & (DATEVALUE(A' + nextRow + ')+14-TODAY()) & " 天", "🟢 體驗中 (剩 " & (DATEVALUE(A' + nextRow + ')+14-TODAY()) & " 天)")))';
   
   sheet.appendRow([dateStr, data.name, data.company, data.email, data.interest, formula, data.message]);
+
+  // 🔔 訪客填單瞬間，自動發送信件到您的 Gmail 信箱
+  try {
+    MailApp.sendEmail({
+      to: "stevensteven2255@gmail.com",
+      subject: "🔔【WHY BIM 官網】收到新客戶洽詢：" + data.name + " (" + data.company + ")",
+      htmlBody: "<div style='font-family:Arial,sans-serif;max-width:600px;padding:20px;border:1px solid #e2e8f0;border-radius:8px;'>" +
+                "<h3 style='color:#2b3a4a;margin-top:0;'>🎉 官網收到新的客戶洽詢！</h3>" +
+                "<p><b>客戶姓名：</b>" + data.name + "</p>" +
+                "<p><b>公司名稱：</b>" + data.company + "</p>" +
+                "<p><b>聯絡信箱：</b><a href='mailto:" + data.email + "'>" + data.email + "</a></p>" +
+                "<p><b>洽詢方案：</b>" + data.interest + "</p>" +
+                "<p><b>需求留言：</b><br>" + data.message + "</p>" +
+                "<hr style='border:none;border-top:1px solid #eee;margin:20px 0;'>" +
+                "<p style='color:#888;font-size:12px;'>提示：您可以直接點擊上方客戶信箱直接回信。</p></div>"
+    });
+  } catch(mailErr) {}
+
   return ContentService.createTextOutput(JSON.stringify({result: 'success'})).setMimeType(ContentService.MimeType.JSON);
 }</textarea>
                         <ol start="3" class="list-decimal list-inside space-y-1 text-[11px] text-morandiSubText">
@@ -2039,7 +2057,7 @@
             loadCopywritingInputs();
         });
 
-        const DEFAULT_GSHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbzaXV27F_PzDFQMCMQCwfF4GPswwqIcJrBnTlA5sseGfMotHNHZ8nhaT3DrwaMKfm3d/exec';
+        const DEFAULT_GSHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbzkgzvBpKR-BaEC9y48rd0S-6YPnPHOjv0zzFjUrXxGSekPgQTP9pdWZ5rKhfc2KU7_rQ/exec';
 
         function initStorage() {
             // Check Leads
@@ -3075,7 +3093,7 @@ support@whybim.com`;
             contactTitle: '與我們取得聯繫',
             contactIntro: '不論您是需要取得為期 14 天的試用版下載授權，或是想進一步了解個別外掛的年費訂閱優惠、高安全晶圓案場的完全離線授權建置，技術專員隨時隨地為您解答。',
             contactEmailLabel: '電子郵件信箱',
-            contactEmailText: 'support@whybim.com',
+            contactEmailText: 'stevensteven2255@gmail.com',
             contactLocationLabel: '技術研發據點',
             contactLocationText: '台灣新竹市科學園區研發園路'
         };
